@@ -1,4 +1,7 @@
+<img width="701" height="463" alt="image" src="https://github.com/user-attachments/assets/5996e29e-f0a0-4404-840c-825b0eafc1f5" />
+
 # HandymanHelper
+
 Handymans Helper is a home services marketplace that connects skilled tradespeople with clients who want quality work at a fair, transparent price.
 
 Refined description
