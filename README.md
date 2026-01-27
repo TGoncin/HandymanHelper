@@ -1,6 +1,57 @@
+<h1 align="center">
+  <br>
+  
 <img width="701" height="463" alt="image" src="https://github.com/user-attachments/assets/5996e29e-f0a0-4404-840c-825b0eafc1f5" />
 
-# HandymanHelper
+<h1 align="center"> Handyman Helper<h1>
+
+
+  <h3 align="center"> Your next move just got a whole lot easier.<h3>
+<br> </b>
+<br> </b>
+<br> </b>
+
+
+  <h2 align="center">Our Team</h2>
+<br>   
+
+  
+<table align="center">
+    <tr>
+      <th>Group Members</th>
+      <th>Tom Goncin</th>
+      <th>Bright Ugbur</th>
+      <th>Tobbi Akinmade</th>
+      <th>Ogunrinde Gbolabo</th>
+    </tr>
+    <tr>
+      <th>Email</th>
+      <td>tgj616@uregina.ca</th>
+      <th>bcu160@uregina.ca</th>
+      <th>oma537@uregina.ca</th>
+      <th>gpo020@uregina.ca</th>
+    </tr>
+    <tr>
+      <th>Student ID</th>
+      <th>2004 12666</th>
+      <th>2004 61156</th>
+      <th>2004 98297</th>
+      <th>2004 94054</th>
+    </tr>
+  </table>
+
+
+<br> </b>
+<br> </b>
+<br> </b>
+
+
+__________________________________________________________________________________________________________________________________________________________
+
+
+
+  <h2 align="center">Project Objective</h2>
+<br>  
 
 Handymans Helper is a home services marketplace that connects skilled tradespeople with clients who want quality work at a fair, transparent price.
 
@@ -27,3 +78,7 @@ The standout feature is the built-in bidding auction: clients post the job they 
 Approved Handymans Helpers submit bids, and the client can choose the best fit—whether that’s the lowest price, the strongest portfolio, or the highest rating.
 
 Handymans Helper gives homeowners and property managers a simple way to find reliable local help, while giving tradespeople a fair, direct way to win work without fighting broken algorithms or overpriced ads.
+
+
+__________________________________________________________________________________________________________________________________________________________
+
