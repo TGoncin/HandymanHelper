@@ -67,7 +67,8 @@ Our team had a vision where workers focused on the quality of their craftsmanshi
 <br>
 <br>
 The demand for verified, skilled help in civilian services has never been higher. However, most current online platforms fail to:
-
+<br>
+<br>
 <ul style="margin-left: 40px;">
 
   <li><strong>Allow contractors to post for free</strong>
