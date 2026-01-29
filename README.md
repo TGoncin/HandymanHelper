@@ -52,15 +52,12 @@
 
 <br> 
 People often struggle with ability to find work, or good quality work that they want done since the industry continues to widen the gap of communication. Contractors continue to struggle through the unreliable and lack of transparent advertising that many mediums offer to bridge the gap of communication between these groups. Existing platforms often prioritize ad revenue and algorithms over providing the best service/product that one pays for and believes they are receiving. This forms an absence of trust, leaving skilled renovators, contractors, artists and alike competing for visibility rather than work quality.<br>
-<br>
 
 Handyman Helper was conceived as a practical solution to bridge this divide. It provides a digital marketplace where local professionals can connect directly with clients seeking reliable, fair priced services. It is a hub statued as a services marketplace that connects skilled tradespeople with clients who want quality work at a fair, transparent price. <br>
-<br> 
 
 The project builds upon modern marketplace frameworks while incorporating unique verification and transparency tools designed specifically for contracting jobs.<br>
 This initiative aims to empower independent workers, small businesses and clients, while simplifying the process for individuals to obtain the best value for their dollar.<br>
 Our team had a vision where workers focused on the quality of their craftsmanship rather than the perpetual hamster wheel of battling for visability through many, if not all forms of advertisement; entirely cutting out the middleman that many feel doesn't hold the honest and feduciary responsibilities one expects and by law is required to.<br>
-<br> 
 
 The demand for verified, skilled help in civilian services has never been higher. However, most current online platforms fail to:
 
