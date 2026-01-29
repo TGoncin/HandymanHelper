@@ -51,14 +51,21 @@
 <br> 
 
 <br> 
-People often struggle with ability to find work, or good quality work that they want done since the industry continues to widen the gap of communication. Contractors continue to struggle through the unreliable and lack of transparent advertising that many mediums offer to bridge the gap of communication between these groups. Existing platforms often prioritize ad revenue and algorithms over providing the best service/product that one pays for and believes they are receiving. This forms an absence of trust, leaving skilled renovators, contractors, artists and alike competing for visibility rather than work quality.<br>
-
-Handyman Helper was conceived as a practical solution to bridge this divide. It provides a digital marketplace where local professionals can connect directly with clients seeking reliable, fair priced services. It is a hub statued as a services marketplace that connects skilled tradespeople with clients who want quality work at a fair, transparent price. <br>
-
-The project builds upon modern marketplace frameworks while incorporating unique verification and transparency tools designed specifically for contracting jobs.<br>
-This initiative aims to empower independent workers, small businesses and clients, while simplifying the process for individuals to obtain the best value for their dollar.<br>
-Our team had a vision where workers focused on the quality of their craftsmanship rather than the perpetual hamster wheel of battling for visability through many, if not all forms of advertisement; entirely cutting out the middleman that many feel doesn't hold the honest and feduciary responsibilities one expects and by law is required to.<br>
-
+People often struggle with ability to find work, or good quality work that they want done since the industry continues to widen the gap of communication. Contractors continue to struggle through the unreliable and lack of transparent advertising that many mediums offer to bridge the gap of communication between these groups. Existing platforms often prioritize ad revenue and algorithms over providing the best service/product that one pays for and believes they are receiving. This forms an absence of trust, leaving skilled renovators, contractors, artists and alike competing for visibility rather than work quality.
+<br>
+<br>
+Handyman Helper was conceived as a practical solution to bridge this divide. It provides a digital marketplace where local professionals can connect directly with clients seeking reliable, fair priced services. It is a hub statued as a services marketplace that connects skilled tradespeople with clients who want quality work at a fair, transparent price.
+<br>
+<br>
+The project builds upon modern marketplace frameworks while incorporating unique verification and transparency tools designed specifically for contracting jobs.
+<br>
+<br>
+This initiative aims to empower independent workers, small businesses and clients, while simplifying the process for individuals to obtain the best value for their dollar.
+<br>
+<br>
+Our team had a vision where workers focused on the quality of their craftsmanship rather than the perpetual hamster wheel of battling for visability through many, if not all forms of advertisement; entirely cutting out the middleman that many feel doesn't hold the honest and feduciary responsibilities one expects and by law is required to.
+<br>
+<br>
 The demand for verified, skilled help in civilian services has never been higher. However, most current online platforms fail to:
 
 <ul style="margin-left: 40px;">
@@ -99,32 +106,32 @@ This project directly meets market demand for trustworthy, efficient, and afford
   
   <li><strong>Launch a fully functional MVP (Minimum Viable Product):</strong>
     <ul style="margin-left: 40px;">
-      &nbsp; &nbsp; &nbsp; &nbsp;That connects verified contractors with clients locally.</ul></li>
+      That connects verified contractors with clients locally.</ul></li>
         <span style="font-size: 1em;">&nbsp;</span>
       
   <li><strong>Implement credential verification systems:</strong>
     <ul style="margin-left: 40px;">
-      &nbsp; &nbsp; &nbsp; &nbsp;Allowing crafts people to upload and validate certifications and Instagram profiles before becoming searchable.</ul></li>
+      Allowing crafts people to upload and validate certifications and Instagram profiles before becoming searchable.</ul></li>
             <span style="font-size: 1em;">&nbsp;</span>
   
   <li><strong>Include transparent client–provider review features:</strong>
     <ul style="margin-left: 40px;">
-      &nbsp; &nbsp; &nbsp; &nbsp;Two-way feedback, project galleries, and ratings.</ul></li>
+      Two-way feedback, project galleries, and ratings.</ul></li>
             <span style="font-size: 1em;">&nbsp;</span>
             
   <li><strong>Develop a secure bidding system:</strong>
     <ul style="margin-left: 40px;">
-      &nbsp; &nbsp; &nbsp; &nbsp;Clients post jobs, approve qualified helpers, and receive bids directly.</ul></li>
+      Clients post jobs, approve qualified helpers, and receive bids directly.</ul></li>
             <span style="font-size: 1em;">&nbsp;</span>
             
   <li><strong>Ensure scalability:</strong>
     <ul style="margin-left: 40px;">
-      &nbsp; &nbsp; &nbsp; &nbsp;Future expansion to additional cities and provinces.</ul></li>
+      Future expansion to additional cities and provinces.</ul></li>
             <span style="font-size: 1em;">&nbsp;</span>
             
   <li><strong>Measure success:</strong>
     <ul style="margin-left: 40px;">
-      &nbsp; &nbsp; &nbsp;Based on user growth, verified provider adoption, client satisfaction/feedback scores, and successful job completion metrics.</ul></li>
+      Based on user growth, verified provider adoption, client satisfaction/feedback scores, and successful job completion metrics.</ul></li>
             <span style="font-size: 1em;">&nbsp;</span>
 
 </ul>
