@@ -136,6 +136,15 @@ This project directly meets market demand for trustworthy, efficient, and afford
             <span style="font-size: 1em;">&nbsp;</span>
 
 </ul>
+<p></p>
+<p></p>
+  <h2 align="center">Join our pole, or provide a written feedback here!</h2>
 
 
-<img width="933" height="401" alt="image" src="https://github.com/user-attachments/assets/c9533a72-2c8f-4c8a-aaa3-49c80569c38d" />
+
+<h3 align="center">
+  <br>
+  <img width="300" alt="QR Code" src="https://github.com/user-attachments/assets/1cf10171-3cb2-4285-8ade-d888766303b8">
+  <br>
+  Scan the QR code to be directed to our GitHub Pole
+</h3>
