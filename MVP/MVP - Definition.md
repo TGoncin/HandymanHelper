@@ -9,7 +9,7 @@ Deliver a minimal working version of HandymanHelper that supports job posting an
 - **Verified Contractor Rule**: only verified contractors can place bids.
 
 ## MVP Features
-###Job Posting (Client)
+### Job Posting (Client)
 - Client can create a job (ad) with:
   - title (required)
   - description (required)
@@ -37,3 +37,4 @@ The MVP is considered successful if:
 - Verified contractors can bid on open jobs, and invalid cases are rejected correctly.
 - Clients can close only their own jobs, and closed jobs no longer accept bids.
 - All decision table test cases pass.
+
