@@ -138,13 +138,23 @@ This project directly meets market demand for trustworthy, efficient, and afford
 </ul>
 <p></p>
 <p></p>
+<h2 align="center">Projects Itinerary</h2>
+<h3 align="center">Click <a href="https://github.com/users/TGoncin/projects/1">here <a/>to view our Kanban Board!
+
+<p></p>
+<br>
+<br>
+<br>
+
+
   <h2 align="center">Join our pole, or provide a written feedback here!</h2>
-
-
 
 <h3 align="center">
   <br>
   <img width="300" alt="QR Code" src="https://github.com/user-attachments/assets/1cf10171-3cb2-4285-8ade-d888766303b8">
   <br>
-  Scan the QR code to be directed to our GitHub Pole
+  Scan the QR code or click the link <a href="https://github.com/TGoncin/HandymanHelper/discussions/17">
+    here
+  </a> to be directed to our GitHub Pole
+</h3>
 </h3>
