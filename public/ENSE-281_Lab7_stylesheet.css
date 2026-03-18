@@ -94,3 +94,336 @@ body {
 .text-warning {
     color: #ff9900 !important;
 }
+/* Title Styling: Arched/Styled look */
+.brand-title {
+    font-family: 'Arial Black', sans-serif;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    /* Add these two lines below for the 'arched' bold look */
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+/* Custom Search Button: Blue Square by default */
+.btn-search-custom {
+    background-color: #003366 !important;
+    /* Your specific Handyman Blue */
+    border-color: #003366 !important;
+    color: white !important;
+    transition: 0.3s;
+}
+
+/* Hover: Blue background stays, Icon turns Yellow */
+.btn-search-custom:hover {
+    background-color: #003366 !important;
+    border-color: #003366 !important;
+}
+
+
+.btn-search-custom:hover i {
+    color: #ffc107 !important;
+    /* Yellow Magnifying Glass */
+}
+
+
+
+/* Custom Search Button: Dark Blue Square */
+.btn-search-custom {
+    background-color: #003366 !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 0 12px 12px 0;
+    /* Matches the input rounding */
+    transition: 0.3s;
+}
+
+/* Hover logic: Square stays Blue, Icon turns Yellow */
+.btn-search-custom:hover i {
+    color: #ffc107 !important;
+}
+
+/* View Details: Bordered Blue, filled Blue with Yellow text on hover */
+.btn-view-details {
+    border: 2px solid #003366 !important;
+    color: #003366 !important;
+    background-color: transparent !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-view-details:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+}
+
+/* Ad Box - Light Yellow */
+.job-card-custom {
+    background-color: #fffdec !important;
+    border: 1px solid #f9e79f !important;
+    border-radius: 15px;
+}
+/* Dark Mode Colors */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .mobile-container,
+body.dark-mode header,
+body.dark-mode .card,
+body.dark-mode #floatingMenu {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    border-color: #333 !important;
+}
+
+/* Make the yellow cards slightly deeper in dark mode so they aren't too bright */
+body.dark-mode .job-card-custom {
+    background-color: #2c2c1e !important;
+    border: 1px solid #443c10 !important;
+}
+
+body.dark-mode .text-muted {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .form-control {
+    background-color: #2d2d2d !important;
+    color: white !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .sticky-bottom {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: white !important;
+}
+body.dark-mode .card {
+    background-color: #1e1e1e !important;
+    color: white !important;
+    border: 1px solid #333 !important;
+}
+body.dark-mode .border.rounded.p-4.bg-white {
+    background-color: #2d2d2d !important;
+    border-color: #444 !important;
+}
+/* Ensure the dark logo doesn't have a white ghost-border */
+body.dark-mode #mainLogo {
+    filter: drop-shadow(0 0 5px rgba(255, 193, 7, 0.2));
+    /* Subtle yellow glow */
+}
+
+/* Make the search bar input look better in dark mode */
+body.dark-mode .form-control {
+    background-color: #2b2b2b !important;
+    border: 1px solid #444 !important;
+    color: #fff !important;
+}
+
+/* Adjust the yellow badges in dark mode so they are readable */
+body.dark-mode .badge.bg-secondary {
+    background-color: #3d3d3d !important;
+    color: #ffc107 !important;
+    /* Yellow text on dark badge */
+}
+
+/* --- DARK MODE MENU TWEAKS --- */
+
+/* Changes "Menu" title to White */
+body.dark-mode #floatingMenu h2 {
+    color: #ffffff !important;
+}
+
+/* Changes the 'X' button to Yellow */
+/* Note: Bootstrap close buttons use a background-image, so we use a filter to change color */
+body.dark-mode .btn-close {
+    filter: invert(78%) sepia(74%) shadow(0 0 2px black);
+    /* Initial inversion */
+    background-color: transparent;
+    opacity: 1;
+}
+
+/* Specific yellow color for the X to match Handyman Yellow */
+body.dark-mode .btn-close {
+    filter: brightness(0) saturate(100%) invert(85%) sepia(34%) saturate(2311%) hue-rotate(358deg) brightness(103%) contrast(104%) !important;
+}
+
+/* Dark mode Menu Accordion Text */
+body.dark-mode .accordion-button {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .accordion-button:not(.collapsed) {
+    color: #ffc107 !important;
+    /* Yellow text when accordion is open */
+}
+/* --- DARK MODE MENU TWEAKS --- */
+
+/* White Menu Title */
+body.dark-mode #floatingMenu h2 {
+    color: #ffffff !important;
+}
+
+/* Yellow Close (X) Button */
+body.dark-mode .btn-close {
+    filter: invert(85%) sepia(34%) saturate(2311%) hue-rotate(358deg) brightness(103%) contrast(104%) !important;
+    opacity: 1;
+}
+
+/* Darker backgrounds for search inputs */
+body.dark-mode .form-control {
+    background-color: #2b2b2b !important;
+    border: 1px solid #444 !important;
+    color: #fff !important;
+}
+
+/* Custom styling for the Login/Submit buttons */
+.btn-primary {
+    background-color: #003366 !important;
+    /* Handyman Blue */
+    border: none !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+    /* Text turns yellow on hover */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Dark mode adjustment for the secondary 'Create Account' button */
+body.dark-mode .btn-outline-secondary {
+    color: #ffffff;
+    border-color: #555;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    background-color: #333;
+    color: #ffc107;
+}
+/* Specifically for the Verification Upload Box */
+body.dark-mode .border.rounded.p-4.bg-white {
+    background-color: #2b2b2b !important;
+    /* Darker box */
+    border-color: #444 !important;
+}
+
+body.dark-mode .bi-camera-fill {
+    color: #ffc107 !important;
+    /* Makes the camera icon Handyman Yellow */
+}
+
+body.dark-mode .text-primary {
+    color: #ffc107 !important;
+    /* Makes "Identity Verification" title Yellow in dark mode */
+}
+
+/* Styling the Select Dropdown for Dark Mode */
+body.dark-mode .form-select {
+    background-color: #2b2b2b !important;
+    border-color: #003366 !important;
+    /* Handyman Blue border */
+    color: white !important;
+}
+
+/* Adjusting the "Already joined?" text */
+body.dark-mode .text-center.mt-4.small {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .text-center.mt-4.small a {
+    color: #ffc107 !important;
+    /* Login link turns Yellow */
+    font-weight: bold;
+}
+
+/* Navbar and Bid Bar Dark Mode Overrides */
+body.dark-mode .navbar,
+body.dark-mode .sticky-bottom,
+body.dark-mode .card-header {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #ffffff !important;
+}
+
+/* Ensure the 'Back' button stays visible */
+body.dark-mode .btn-outline-secondary {
+    color: #ffc107 !important;
+    border-color: #555 !important;
+}
+
+/* List group items (Bids) */
+body.dark-mode .list-group-item {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #ffffff !important;
+}
+
+/* Sticky Bottom for Contractor Bidding */
+body.dark-mode .sticky-bottom {
+    background-color: #1e1e1e !important;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* Input group addon ($ sign) */
+body.dark-mode .input-group-text {
+    background-color: #333 !important;
+    border-color: #444 !important;
+    color: #ffc107 !important;
+}
+
+/* Optional: Smooth transition for theme swapping */
+body {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+#mainLogo {
+    transition: opacity 0.2s ease-in-out;
+}
+
+
+/* Fix the floating menu background */
+body.dark-mode #floatingMenu {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+}
+
+/* Make dropdown menus dark */
+body.dark-mode .dropdown-menu {
+    background-color: #2d2d2d !important;
+    border: 1px solid #444 !important;
+}
+
+body.dark-mode .dropdown-item {
+    color: #ffffff !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background-color: #003366 !important;
+    /* Handyman Blue hover */
+    color: #ffc107 !important;
+    /* Yellow text on hover */
+}
+
+/* Style the 'Filter' buttons inside the accordion */
+body.dark-mode .btn-light {
+    background-color: #333 !important;
+    border-color: #444 !important;
+    color: #ffffff !important;
+}
+
+/* Ensure the total ads badge is readable */
+body.dark-mode .badge.bg-secondary {
+    background-color: #3d3d3d !important;
+    color: #ffc107 !important;
+    border: 1px solid #ffc107 !important;
+}
+/* Gives a subtle 'lift' to cards in dark mode when tapped */
+body.dark-mode .job-card-custom:active {
+    background-color: #333225 !important;
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.3) !important;
+    transform: scale(0.98);
+}

@@ -6,12 +6,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Job Details - HandymanHelper</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/ENSE-281_Lab7_stylesheet.css">
+
 </head>
 
 <body class="bg-light">
 
     <nav class="navbar navbar-light bg-white border-bottom shadow-sm mb-4">
         <div class="container-fluid">
+            <a href="/marketplace">
+                <img id="mainLogo" src="/images/logo.png" alt="Handyman Helper" style="max-height: 70px; width: auto;"
+                    class="mb-2">
+            </a>
             <form action="/marketplace" method="post" class="m-0">
                 <input type="hidden" name="username" value="<%= currentUser.username %>">
                 <button type="submit" class="btn btn-sm btn-outline-secondary">← Back</button>
@@ -47,21 +53,21 @@
         </div>
 
         <div class="card shadow-sm border-0 mb-5">
-            <div class="card-header bg-white fw-bold">Bids Received (<%= job.bids.length %>) [cite: 8]</div>
+            <div class="card-header bg-white fw-bold">Bids Received (<%= job.bids.length %>)</div>
             <div class="card-body p-0">
                 <% if (job.bids.length> 0) { %>
                     <ul class="list-group list-group-flush">
-                        <% job.bids.forEach(bid=> { %> [cite: 9]
+                        <% job.bids.forEach(bid=> { %>
                             <li class="list-group-item d-flex justify-content-between align-items-center p-3">
                                 <div>
-                                    <span class="fw-bold text-primary">@<%= bid.contractor %></span> [cite: 10]
+                                    <span class="fw-bold text-primary">@<%= bid.contractor %></span>
                                     <br>
                                     <small class="text-muted">
                                         <%= new Date(bid.date).toLocaleDateString() %>
-                                    </small> [cite: 11]
+                                    </small>
                                 </div>
                                 <div class="d-flex align-items-center">
-                                    <span class="fw-bold h5 mb-0 me-3">$<%= bid.amount %></span> [cite: 12]
+                                    <span class="fw-bold h5 mb-0 me-3">$<%= bid.amount %></span>
 
                                     <% if (currentUser.role==='CLIENT' && job.client===currentUser.username &&
                                         job.status==='OPEN' ) { %>
@@ -78,7 +84,7 @@
                             <% }) %>
                     </ul>
                     <% } else { %>
-                        <div class="p-4 text-center text-muted">No bids yet. [cite: 14]</div>
+                        <div class="p-4 text-center text-muted">No bids yet.</div>
                         <% } %>
             </div>
         </div>
@@ -100,7 +106,41 @@
             </div>
             <% } %>
     </main>
+    <script>
+        const body = document.body;
+        const mainLogo = document.getElementById('mainLogo');
+        const darkModeToggle = document.getElementById('darkModeToggle');
 
+        function updateLogo(isDark) {
+            if (mainLogo) {
+                mainLogo.src = isDark ? '/images/logo-dark.png' : '/images/logo.png';
+            }
+        }
+
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark') {
+            body.classList.add('dark-mode');
+            if (darkModeToggle) darkModeToggle.checked = true;
+            updateLogo(true);
+        } else {
+            updateLogo(false);
+        }
+
+        if (darkModeToggle) {
+            darkModeToggle.addEventListener('change', () => {
+                if (darkModeToggle.checked) {
+                    body.classList.add('dark-mode');
+                    localStorage.setItem('theme', 'dark');
+                    updateLogo(true);
+                } else {
+                    body.classList.remove('dark-mode');
+                    localStorage.setItem('theme', 'light');
+                    updateLogo(false);
+                }
+            });
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

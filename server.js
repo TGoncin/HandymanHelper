@@ -13,6 +13,16 @@ const Job = require("./models/Job");
 const app = express();
 const PORT = 3000;
 
+const fs = require("fs");
+
+const folders = ["./public/uploads", "./public/images"];
+folders.forEach((dir) => {
+    if (!fs.existsSync(dir)) {
+        fs.mkdirSync(dir, { recursive: true });
+        console.log(`Created directory: ${dir}`);
+    }
+});
+
 //__________________________________________________________________________________________
 //                                 MULTER CONFIGURATION
 //__________________________________________________________________________________________
@@ -77,47 +87,53 @@ async function startServer() {
 
     // --- MAIN MARKETPLACE ROUTE ---
     app.post("/marketplace", async (req, res) => {
-        const { username, search, minPrice, maxPrice, viewMode } = req.body;
-
+        const { username, search, sort, category, viewMode } = req.body;
         const page = parseInt(req.query.page) || 1;
         const limit = 25;
         const skip = (page - 1) * limit;
 
         let query = {};
 
-        // Mode Toggle: Show all or just user's bids
-        if (viewMode === "MY_BIDS") {
-            query["bids.contractor"] = username;
+        // 1. Category Filtering Logic
+        if (category && category !== "General") {
+            query.category = category;
         }
 
-        // Price Filtering
-        if (minPrice && maxPrice) {
-            query.budget = { $gte: Number(minPrice), $lte: Number(maxPrice) };
-        }
-
-        // Search Term Filtering
+        // 2. Search Logic (Improved to search both Title and Description)
         if (search) {
-            query.title = { $regex: search, $options: "i" };
+            query.$or = [
+                { title: { $regex: search, $options: "i" } },
+                { description: { $regex: search, $options: "i" } },
+            ];
         }
+
+        // 3. View Mode Logic
+        if (viewMode === "MY_POSTS") {
+            query.client = username;
+        }
+
+        // 4. Sorting Logic
+        let sortOptions = { _id: -1 };
+        if (sort === "desc") sortOptions = { budget: -1 };
+        if (sort === "asc") sortOptions = { budget: 1 };
 
         try {
-            const posts = await Job.find(query).sort({ _id: -1 }).skip(skip).limit(limit);
-            const totalJobs = await Job.countDocuments(query);
-            const totalPages = Math.ceil(totalJobs / limit) || 1;
+            const jobs = await Job.find(query).sort(sortOptions).skip(skip).limit(limit);
+            const totalAds = await Job.countDocuments(query);
             const currentUser = await User.findOne({ username });
 
             res.render("marketplace", {
                 currentUser,
-                posts,
+                jobs,
+                totalAds,
                 currentPage: page,
-                totalPages: totalPages,
+                totalPages: Math.ceil(totalAds / limit) || 1,
                 searchQuery: search || "",
                 viewMode: viewMode || "ALL",
-                minPrice: minPrice || 0,
-                maxPrice: maxPrice || 10000,
+                selectedCategory: category || "General",
             });
         } catch (err) {
-            console.error("Marketplace Error:", err);
+            console.error("Filter Error:", err);
             res.redirect("/");
         }
     });
@@ -140,8 +156,16 @@ async function startServer() {
         try {
             const job = await Job.findById(postId);
             const currentUser = await User.findOne({ username });
+
+            // Check if job exists to prevent the 'null' error
+            if (!job) {
+                console.log("Job not found for ID:", postId);
+                return res.redirect(307, "/marketplace");
+            }
+
             res.render("job-details", { job, currentUser });
         } catch (err) {
+            console.error("Error fetching job details:", err);
             res.redirect(307, "/marketplace");
         }
     });
@@ -161,9 +185,17 @@ async function startServer() {
     });
 
     app.post("/accept-bid", async (req, res) => {
-        const { postId } = req.body;
-        await Job.findByIdAndUpdate(postId, { status: "CLOSED" });
-        res.redirect(307, "/job-details");
+        const { postId, contractor, amount } = req.body; // Pull data from your accept form
+        try {
+            await Job.findByIdAndUpdate(postId, {
+                status: "CLOSED",
+                acceptedContractor: contractor,
+                finalPrice: amount,
+            });
+            res.redirect(307, "/job-details");
+        } catch (err) {
+            res.status(500).send("Error accepting bid.");
+        }
     });
 
     // --- VERIFICATION ROUTES ---
@@ -178,9 +210,27 @@ async function startServer() {
         const updateData = {
             licenseNumber: licenseNumber,
             idPhotoPath: req.file ? req.file.filename : "",
+            isVerified: true, // Auto-verify upon upload for the lab
         };
-        await User.findOneAndUpdate({ username }, updateData);
-        res.redirect(307, "/marketplace");
+        try {
+            await User.findOneAndUpdate({ username }, updateData);
+            // Using 307 here ensures the username is passed back to the marketplace
+            res.redirect(307, "/marketplace");
+        } catch (err) {
+            console.error(err);
+            res.status(500).send("Verification failed.");
+        }
+    });
+
+    app.post("/delete-post", async (req, res) => {
+        const { username, postId } = req.body;
+        try {
+            // Only allow the person who created the post to delete it
+            await Job.findOneAndDelete({ _id: postId, client: username });
+            res.redirect(307, "/marketplace");
+        } catch (err) {
+            res.status(500).send("Error deleting post.");
+        }
     });
 
     app.listen(PORT, () => console.log(`HandymanHelper running at http://localhost:${PORT}`));
