@@ -1,0 +1,96 @@
+/* Name: Tom Goncin */
+/* Date: March 2026 */
+/* Description: HandymanHelper - Mobile-First Marketplace */
+
+/* 1. GLOBAL RESET & MOBILE CONTAINER */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #f8f9fa;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.mobile-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #ffffff;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. NAVIGATION & STICKY ELEMENTS */
+/* The Menu bar that stays at the top */
+.sticky-top {
+    top: 0;
+    z-index: 1020;
+    background-color: #f8f9fa !important;
+}
+
+/* 3. JOB CARDS (Centered Layout) */
+.card.w-100 {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 20px !important;
+    /* Extra rounded as per your last photo */
+    border: 1px solid #dee2e6 !important;
+    margin-bottom: 15px;
+}
+
+.card-body h3 {
+    font-size: 1.5rem;
+    color: #212529;
+}
+
+.card.w-100:active {
+    transform: scale(0.98);
+}
+
+/* 4. ACCORDION & MENU OVERLAY */
+.accordion-item {
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+}
+
+/* Ensures the menu overlay takes full mobile container width */
+#floatingMenu {
+    max-width: 500px;
+    left: 50% !important;
+    transform: translateX(-50%);
+}
+
+/* 5. SEARCH & PAGINATION */
+.input-group {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.pagination {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.page-link {
+    border-radius: 8px !important;
+    margin: 0 3px;
+    color: #0d6efd;
+}
+
+/* 6. UTILITIES */
+.badge.bg-success {
+    background-color: #198754 !important;
+    font-size: 1.1rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+/* Custom coloring for the logo text */
+.text-primary {
+    color: #003366 !important;
+}
+
+.text-warning {
+    color: #ff9900 !important;
+}

@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HandymanHelper Marketplace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/ENSE-281_Lab7_stylesheet.css">
+</head>
+
+<body class="bg-light pb-5">
+  <div class="mobile-container">
+
+    <header class="bg-white p-3 border-bottom text-center">
+      <h1 class="h2 mb-0 fw-bold">
+        <span class="text-primary">HANDYMAN</span> <span class="text-warning">HELPER</span>
+      </h1>
+      <div class="text-start mt-1">
+        <small class="text-muted">Hello, <strong>
+            <%= currentUser.username %>
+          </strong>!</small>
+      </div>
+
+      <form action="/marketplace" method="POST" class="mt-3">
+        <input type="hidden" name="username" value="<%= currentUser.username %>">
+        <input type="hidden" name="viewMode" value="<%= viewMode %>">
+        <div class="input-group shadow-sm">
+          <span class="input-group-text bg-white border-end-0"><i class="bi bi-search"></i></span>
+          <input type="text" name="search" class="form-control border-start-0" placeholder="Search"
+            value="<%= searchQuery %>">
+          <button type="submit" class="btn btn-primary px-4">Search</button>
+        </div>
+      </form>
+    </header>
+
+    <nav class="sticky-top bg-light py-2 shadow-sm border-bottom text-center">
+      <button class="btn btn-primary px-5 fw-bold" type="button" data-bs-toggle="collapse"
+        data-bs-target="#floatingMenu">
+        <i class="bi bi-list me-2"></i> Menu
+      </button>
+    </nav>
+
+    <main class="container py-3">
+      <div class="d-flex flex-column gap-3">
+        <% if (posts.length> 0) { %>
+          <% posts.forEach(function(post) { %>
+            <form action="/job-details" method="post" class="w-100">
+              <input type="hidden" name="username" value="<%= currentUser.username %>">
+              <input type="hidden" name="postId" value="<%= post._id %>">
+
+              <button type="submit" class="card w-100 shadow-sm border-dark text-center p-0 bg-white"
+                style="text-align: inherit;">
+                <div class="card-body p-4">
+                  <h3 class="fw-bold mb-1">
+                    <%= post.title %>
+                  </h3>
+                  <div class="text-muted mb-3" style="font-size: 0.8rem;">
+                    Regina, SK | <%= post.createdAt ? new Date(post.createdAt).toLocaleDateString() : 'Just now' %>
+                  </div>
+                  <p class="text-muted mb-4">
+                    <%= post.description %>
+                  </p>
+
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div style="width: 80px;"></div>
+                    <span class="badge bg-success fs-5 py-2 px-3">$<%= post.budget %></span>
+                    <div style="width: 80px;" class="text-end">
+                      <small class="text-primary fw-bold">View Details →</small>
+                    </div>
+                  </div>
+                </div>
+              </button>
+            </form>
+            <% }) %>
+              <% } else { %>
+                <div class="text-center py-5 text-muted">No ads found.</div>
+                <% } %>
+      </div>
+
+      <nav class="mt-5 mb-5">
+        <ul class="pagination justify-content-center">
+          <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <button type="submit" form="pageForm" formaction="/marketplace?page=<%= currentPage - 1 %>"
+              class="page-link">Previous</button>
+          </li>
+          <li class="page-item active">
+            <span class="page-link">
+              <%= currentPage %> / <%= totalPages %>
+            </span>
+          </li>
+          <li class="page-item <%= currentPage === totalPages ? 'disabled' : '' %>">
+            <button type="submit" form="pageForm" formaction="/marketplace?page=<%= currentPage + 1 %>"
+              class="page-link">Next</button>
+          </li>
+        </ul>
+      </nav>
+    </main>
+
+    <div class="collapse fixed-top w-100 h-100 bg-white shadow-lg overflow-auto" id="floatingMenu"
+      style="z-index: 1060; padding-top: 80px;">
+      <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold text-primary">Menu</h2>
+          <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#floatingMenu"></button>
+        </div>
+        <div class="d-grid gap-3">
+          <a href="/logout" class="btn btn-outline-danger py-3">Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <form id="pageForm" method="POST" style="display: none;">
+      <input type="hidden" name="username" value="<%= currentUser.username %>">
+      <input type="hidden" name="search" value="<%= searchQuery %>">
+      <input type="hidden" name="viewMode" value="<%= viewMode %>">
+    </form>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details - HandymanHelper</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body class="bg-light">
+
+    <nav class="navbar navbar-light bg-white border-bottom shadow-sm mb-4">
+        <div class="container-fluid">
+            <form action="/marketplace" method="post" class="m-0">
+                <input type="hidden" name="username" value="<%= currentUser.username %>">
+                <button type="submit" class="btn btn-sm btn-outline-secondary">← Back</button>
+            </form>
+            <span class="navbar-brand mb-0 h1 text-primary fw-bold">Job Details</span>
+            <div></div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="card shadow-sm border-0 mb-4">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start">
+                    <h2 class="fw-bold">
+                        <%= job.title %>
+                    </h2>
+                    <span class="badge bg-success fs-5">$<%= job.budget %></span>
+                </div>
+                <p class="text-muted mb-3">Posted by: <strong>
+                        <%= job.client %>
+                    </strong></p>
+                <hr>
+                <h5 class="fw-bold">Description</h5>
+                <p class="lead text-dark">
+                    <%= job.description %>
+                </p>
+                <div class="mt-3">
+                    <span class="badge rounded-pill <%= job.status === 'OPEN' ? 'bg-primary' : 'bg-secondary' %>">
+                        Status: <%= job.status %>
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card shadow-sm border-0 mb-5">
+            <div class="card-header bg-white fw-bold">Bids Received (<%= job.bids.length %>) [cite: 8]</div>
+            <div class="card-body p-0">
+                <% if (job.bids.length> 0) { %>
+                    <ul class="list-group list-group-flush">
+                        <% job.bids.forEach(bid=> { %> [cite: 9]
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <div>
+                                    <span class="fw-bold text-primary">@<%= bid.contractor %></span> [cite: 10]
+                                    <br>
+                                    <small class="text-muted">
+                                        <%= new Date(bid.date).toLocaleDateString() %>
+                                    </small> [cite: 11]
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <span class="fw-bold h5 mb-0 me-3">$<%= bid.amount %></span> [cite: 12]
+
+                                    <% if (currentUser.role==='CLIENT' && job.client===currentUser.username &&
+                                        job.status==='OPEN' ) { %>
+                                        <form action="/accept-bid" method="post">
+                                            <input type="hidden" name="username" value="<%= currentUser.username %>">
+                                            <input type="hidden" name="postId" value="<%= job._id %>">
+                                            <input type="hidden" name="contractor" value="<%= bid.contractor %>">
+                                            <input type="hidden" name="amount" value="<%= bid.amount %>">
+                                            <button type="submit" class="btn btn-sm btn-success">Accept</button>
+                                        </form>
+                                        <% } %>
+                                </div>
+                            </li>
+                            <% }) %>
+                    </ul>
+                    <% } else { %>
+                        <div class="p-4 text-center text-muted">No bids yet. [cite: 14]</div>
+                        <% } %>
+            </div>
+        </div>
+
+        <% if (currentUser.role==='CONTRACTOR' && job.status==='OPEN' ) { %>
+            <div class="sticky-bottom bg-white p-3 border-top shadow-lg">
+                <form action="/place-bid" method="post" class="input-group">
+                    <input type="hidden" name="username" value="<%= currentUser.username %>">
+                    <input type="hidden" name="postId" value="<%= job._id %>">
+                    <span class="input-group-text">$</span>
+                    <input type="number" name="bidAmount" class="form-control" value="<%= job.budget %>" required>
+                    <button type="submit" class="btn btn-primary px-4" <%=!currentUser.isVerified ? 'disabled' : '' %>>
+                        Place Bid
+                    </button>
+                </form>
+                <% if (!currentUser.isVerified) { %>
+                    <small class="text-danger mt-1 d-block">You must be verified to bid.</small>
+                    <% } %>
+            </div>
+            <% } %>
+    </main>
+
+</body>
+
+</html>
