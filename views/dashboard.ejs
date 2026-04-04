@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard - HandymanHelper</title>
+    <link rel="stylesheet" href="/ENSE-281_Lab7_stylesheet.css" />
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .dashboard-container {
+            max-width: 1100px;
+            margin: 30px auto;
+            padding: 20px;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .dashboard-title {
+            margin: 0;
+        }
+
+        .top-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .summary-card,
+        .section-card {
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 18px;
+            background: #fff;
+        }
+
+        .summary-card h3,
+        .section-card h2 {
+            margin-top: 0;
+        }
+
+        .section-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .post-item,
+        .bid-item {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 12px;
+            margin-bottom: 12px;
+            background: #fafafa;
+        }
+
+        .status-open {
+            color: green;
+            font-weight: bold;
+        }
+
+        .status-closed {
+            color: crimson;
+            font-weight: bold;
+        }
+
+        .verified {
+            color: green;
+            font-weight: bold;
+        }
+
+        .not-verified {
+            color: darkorange;
+            font-weight: bold;
+        }
+
+        .empty-state {
+            color: #666;
+            font-style: italic;
+        }
+
+        button {
+            padding: 10px 14px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+
+        .primary-btn {
+            background: #222;
+            color: white;
+        }
+
+        .secondary-btn {
+            background: #e9e9e9;
+        }
+
+        @media (max-width: 800px) {
+            .section-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="dashboard-container">
+        <div class="dashboard-header">
+            <div>
+                <h1 class="dashboard-title">Welcome, <%= currentUser.username %>
+                </h1>
+                <p>This is your personal dashboard.</p>
+            </div>
+
+            <div class="top-actions">
+                <form action="/marketplace" method="POST">
+                    <input type="hidden" name="username" value="<%= currentUser.username %>">
+                    <button type="submit" class="secondary-btn">Back to Marketplace</button>
+                </form>
+
+                <form action="/logout" method="GET">
+                    <button type="submit" class="primary-btn">Logout</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="summary-grid">
+            <div class="summary-card">
+                <h3>Verification Status</h3>
+                <% if (currentUser.isVerified) { %>
+                    <p class="verified">Verified</p>
+                    <% } else { %>
+                        <p class="not-verified">Not Verified</p>
+                        <% } %>
+            </div>
+
+            <div class="summary-card">
+                <h3>Posts Created</h3>
+                <p>
+                    <%= numberOfPostsCreated %>
+                </p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Bids Placed</h3>
+                <p>
+                    <%= numberOfBidsPlaced %>
+                </p>
+            </div>
+
+            <div class="summary-card">
+                <h3>Role</h3>
+                <p>
+                    <%= currentUser.role %>
+                </p>
+            </div>
+        </div>
+
+        <div class="section-grid">
+            <div class="section-card">
+                <h2>My Posts</h2>
+
+                <% if (myPosts.length===0) { %>
+                    <p class="empty-state">You have not created any posts yet.</p>
+                    <% } else { %>
+                        <% myPosts.forEach(post=> { %>
+                            <div class="post-item">
+                                <h3>
+                                    <%= post.title %>
+                                </h3>
+                                <p><strong>Description:</strong>
+                                    <%= post.description %>
+                                </p>
+                                <p><strong>Budget:</strong> $<%= post.budget %>
+                                </p>
+                                <p>
+                                    <strong>Status:</strong>
+                                    <span class="<%= post.status === 'OPEN' ? 'status-open' : 'status-closed' %>">
+                                        <%= post.status %>
+                                    </span>
+                                </p>
+                                <p><strong>Total Bids:</strong>
+                                    <%= post.bids.length %>
+                                </p>
+                            </div>
+                            <% }) %>
+                                <% } %>
+            </div>
+
+            <div class="section-card">
+                <h2>Jobs I Bid On</h2>
+
+                <% if (jobsIBidOn.length===0) { %>
+                    <p class="empty-state">You have not placed any bids yet.</p>
+                    <% } else { %>
+                        <% jobsIBidOn.forEach(job=> { %>
+                            <div class="bid-item">
+                                <h3>
+                                    <%= job.title %>
+                                </h3>
+                                <p><strong>Client:</strong>
+                                    <%= job.client %>
+                                </p>
+                                <p><strong>Budget:</strong> $<%= job.budget %>
+                                </p>
+                                <p>
+                                    <strong>Status:</strong>
+                                    <span class="<%= job.status === 'OPEN' ? 'status-open' : 'status-closed' %>">
+                                        <%= job.status %>
+                                    </span>
+                                </p>
+
+                                <p><strong>My Bid(s):</strong></p>
+                                <ul>
+                                    <% job.bids .filter(bid=> bid.contractor === currentUser.username)
+                                        .forEach(bid => { %>
+                                        <li>$<%= bid.amount %>
+                                        </li>
+                                        <% }) %>
+                                </ul>
+                            </div>
+                            <% }) %>
+                                <% } %>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

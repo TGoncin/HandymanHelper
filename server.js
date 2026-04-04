@@ -11,7 +11,7 @@ const User = require("./models/User");
 const Job = require("./models/Job");
 
 const app = express();
-const PORT = 3000;
+const PORT = 3001;
 
 const fs = require("fs");
 
@@ -49,6 +49,9 @@ app.set("views", path.join(__dirname, "views"));
 app.get("/", (req, res) => res.render("login"));
 app.get("/register", (req, res) => res.render("register"));
 app.get("/logout", (req, res) => res.redirect("/"));
+app.get("/debug", (req, res) => {
+    res.send("THIS IS THE UPDATED SERVER");
+});
 
 //__________________________________________________________________________________________
 //                               DATABASE & SERVER START
@@ -151,6 +154,42 @@ async function startServer() {
         res.redirect(307, "/marketplace");
     });
 
+    app.post("/dashboard", async (req, res) => {
+        const { username } = req.body;
+
+        try {
+            const currentUser = await User.findOne({ username });
+
+            if (!currentUser) {
+                return res.redirect("/");
+            }
+
+            const myPosts = await Job.find({ client: username }).sort({ createdAt: -1 });
+
+            const jobsIBidOn = await Job.find({
+                "bids.contractor": username,
+            }).sort({ createdAt: -1 });
+
+            const numberOfPostsCreated = myPosts.length;
+
+            const numberOfBidsPlaced = jobsIBidOn.reduce((total, job) => {
+                const myBidsOnThisJob = job.bids.filter((bid) => bid.contractor === username).length;
+                return total + myBidsOnThisJob;
+            }, 0);
+
+            res.render("dashboard", {
+                currentUser,
+                myPosts,
+                jobsIBidOn,
+                numberOfPostsCreated,
+                numberOfBidsPlaced,
+            });
+        } catch (err) {
+            console.error("Dashboard Error:", err);
+            res.status(500).send("Error loading dashboard.");
+        }
+    });
+
     app.post("/job-details", async (req, res) => {
         const { username, postId } = req.body;
         try {
@@ -232,6 +271,8 @@ async function startServer() {
             res.status(500).send("Error deleting post.");
         }
     });
+
+
 
     app.listen(PORT, () => console.log(`HandymanHelper running at http://localhost:${PORT}`));
 }

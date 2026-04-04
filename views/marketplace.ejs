@@ -187,20 +187,31 @@
             </div>
           </div>
 
-          <button class="btn btn-outline-secondary w-100 py-3 text-start">
-            <i class="bi bi-mailbox me-2"></i> General Posts
-          </button>
+          <form action="/marketplace" method="POST">
+            <input type="hidden" name="username" value="<%= currentUser.username %>">
+            <input type="hidden" name="category" value="General">
+            <button type="submit" class="btn btn-outline-secondary w-100 py-3 text-start">
+              <i class="bi bi-mailbox me-2"></i> General Posts
+            </button>
+          </form>
 
-          <button class="btn btn-outline-secondary w-100 py-3 text-start">
-            <i class="bi bi-person-badge me-2"></i> My Posts
-          </button>
+          <form action="/marketplace" method="POST">
+            <input type="hidden" name="username" value="<%= currentUser.username %>">
+            <input type="hidden" name="viewMode" value="MY_POSTS">
+            <button type="submit" class="btn btn-outline-secondary w-100 py-3 text-start">
+              <i class="bi bi-person-badge me-2"></i> My Posts
+            </button>
+          </form>
+
+          <form action="/dashboard" method="POST">
+            <input type="hidden" name="username" value="<%= currentUser.username %>">
+            <button type="submit" class="btn btn-outline-info w-100 py-3 text-start">
+              <i class="bi bi-person-circle me-2"></i> Dashboard
+            </button>
+          </form>
 
           <button class="btn btn-outline-warning w-100 py-3 text-start">
             <i class="bi bi-exclamation-triangle me-2"></i> Report an issue
-          </button>
-
-          <button class="btn btn-outline-info w-100 py-3 text-start">
-            <i class="bi bi-person-circle me-2"></i> My Account
           </button>
 
           <hr>
