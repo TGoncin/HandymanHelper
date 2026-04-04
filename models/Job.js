@@ -5,6 +5,7 @@ const JobSchema = new mongoose.Schema(
         title: { type: String, required: true },
         description: { type: String, required: true },
         budget: { type: Number, default: 0 },
+        category: { type: String, default: "General" },
         client: { type: String, required: true },
         status: { type: String, enum: ["OPEN", "CLOSED"], default: "OPEN" },
         bids: [

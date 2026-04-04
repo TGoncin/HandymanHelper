@@ -143,15 +143,41 @@ async function startServer() {
 
     // --- JOB & BIDDING ROUTES ---
     app.post("/addpost", async (req, res) => {
-        const { username, text, budget } = req.body;
-        const newJob = new Job({
+        const { username, title, description, budget, category } = req.body;
+
+        try {
+            const user = await User.findOne({ username });
+
+            // Only clients can post jobs
+            if (!user || user.role !== "CLIENT") {
+                return res.status(403).send("Only clients can create jobs.");
+            }
+
+            if (!title || !description) {
+                return res.status(400).send("Title and description are required.");
+            }
+
+        /* const newJob = new Job({
             title: text.substring(0, 25) + "...",
             description: text,
             budget: budget || 0,
             client: username,
         });
-        await newJob.save();
-        res.redirect(307, "/marketplace");
+        */
+            const newJob = new Job({
+                title: title.trim(),
+                description: description.trim(),
+                budget: Number(budget) || 0,
+                category: category || "General",
+                client: username,
+            })
+            await newJob.save();
+
+            res.redirect(307, "/marketplace");
+        } catch (err) {
+            console.error("Add Post Error:", err);
+            res.status(500).send("Error creating job post.");
+        }
     });
 
     app.post("/dashboard", async (req, res) => {
