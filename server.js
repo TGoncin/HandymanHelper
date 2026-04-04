@@ -237,28 +237,76 @@ async function startServer() {
 
     app.post("/place-bid", async (req, res) => {
         const { username, postId, bidAmount } = req.body;
-        const user = await User.findOne({ username });
 
+        const user = await User.findOne({ username });
+        const job = await Job.findById(postId);
+
+        if (!user || !job) return res.status(404).send("User or job not found.");
+
+        if (user.role !== "CONTRACTOR"){
+            return res.status(403).send("Only contractors can bid.");
+        }
+        
         if (!user.isVerified) return res.status(403).send("You must be verified to place bids.");
 
-        const job = await Job.findById(postId);
+        if (job.status !== "OPEN") {
+            return res.status (400).send("Job is closed.");
+        }
+
+        /*
         if (job.status === "OPEN") {
             job.bids.push({ contractor: username, amount: bidAmount });
             await job.save();
         }
+        */
+
+        if (job.client === username) {
+            return res.status(403).send("You cannot bid on your own job.");
+        }
+
+        const amount = Number(bidAmount);
+        if (!amount || amount <= 0) {
+            return res.status(400).send("Invalid bid amount.");
+        }
+
+        job.bids.push({ contractor: username, amount });
+        await job.save();
+
         res.redirect(307, "/job-details");
     });
 
     app.post("/accept-bid", async (req, res) => {
-        const { postId, contractor, amount } = req.body; // Pull data from your accept form
+        const { username, postId, contractor, amount } = req.body; // Pull data from your accept form
         try {
+            /*
             await Job.findByIdAndUpdate(postId, {
                 status: "CLOSED",
                 acceptedContractor: contractor,
                 finalPrice: amount,
             });
+            */
+            const user = await User.findOne({ username });
+            const job = await Job.findById(postId);
+
+            if (!user) return res.status(404).send("User not found.");
+            if (!job) return res.status(404).send("Job not found.");
+            if (user.role !== "CLIENT") return res.status(403).send("Only clients can accept bids.");
+            if (job.client !== user.username) return res.status(403).send("You can only accept bids on your own jobs.");
+            if (job.status !== "OPEN") return res.status(400).send("Job is already closed.");
+
+            const matchedBid = job.bids.find((bid) => bid.contractor === contractor && Number(bid.amount) === Number(amount));
+
+            if (!matchedBid) return res.status(400).send("Bid not found.");
+
+            job.status = "CLOSED";
+            job.acceptedContractor = contractor;
+            job.finalPrice = Number(amount);
+
+            await job.save();
+
             res.redirect(307, "/job-details");
         } catch (err) {
+            console.error("Accept Bid Error:", err);
             res.status(500).send("Error accepting bid.");
         }
     });
