@@ -1,0 +1,571 @@
+/* Name: Tom Goncin */
+/* Date: March 2026 */
+/* Description: HandymanHelper - Mobile-First Marketplace */
+
+/* 1. GLOBAL RESET & MOBILE CONTAINER */
+body {
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    background-color: #f0f0ec;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.mobile-container {
+    max-width: 500px;
+    margin: 0 auto;
+    background-color: #f5f5f0;
+    min-height: 100vh;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.05);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 2. NAVIGATION & STICKY ELEMENTS */
+.sticky-top {
+    top: 0;
+    z-index: 1020;
+    background-color: #f5f5f0 !important;
+    border-bottom: none !important;
+}
+
+/* 3. JOB CARDS */
+.card.w-100 {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 20px !important;
+    border: 1px solid #dee2e6 !important;
+    margin-bottom: 15px;
+}
+
+.card-body h3 {
+    font-size: 1.5rem;
+    color: #212529;
+}
+
+.card.w-100:active {
+    transform: scale(0.98);
+}
+
+/* 4. ACCORDION & MENU OVERLAY */
+.accordion-item {
+    border: none !important;
+    border-bottom: 1px solid #eee !important;
+}
+
+#floatingMenu {
+    max-width: 500px;
+    left: 50% !important;
+    transform: translateX(-50%);
+}
+
+/* 5. SEARCH & PAGINATION */
+.input-group {
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.pagination {
+    margin-top: 30px;
+    margin-bottom: 50px;
+}
+
+.page-link {
+    border-radius: 8px !important;
+    margin: 0 3px;
+    color: #0d6efd;
+}
+
+/* 6. UTILITIES */
+.badge.bg-success {
+    background-color: #198754 !important;
+    font-size: 1.1rem;
+    padding: 8px 16px;
+    border-radius: 8px;
+}
+
+.text-primary {
+    color: #003366 !important;
+}
+
+.text-warning {
+    color: #ffc107 !important;
+}
+
+.brand-title {
+    font-family: 'Arial Black', sans-serif;
+    letter-spacing: -1px;
+    text-transform: uppercase;
+    font-size: 1.8rem;
+    line-height: 1;
+}
+
+/* CSS Text Logo */
+.css-logo {
+    text-align: center;
+    padding: 10px 0;
+    text-decoration: none !important;
+    display: block;
+}
+
+.css-logo .logo-top {
+    font-family: 'Arial Black', 'Impact', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #003366;
+    line-height: 1;
+    display: block;
+}
+
+.css-logo .logo-bottom {
+    font-family: 'Arial Black', 'Impact', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 900;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #ffc107;
+    line-height: 1;
+    display: block;
+    text-shadow: 0 2px 0 rgba(0, 0, 0, 0.1);
+    transform: scaleY(0.95);
+    border-radius: 0 0 50% 50%;
+    padding: 0 15px;
+}
+
+body.dark-mode .css-logo .logo-top {
+    color: #ffffff;
+}
+
+body.dark-mode .css-logo .logo-bottom {
+    color: #ffc107;
+}
+
+/* Custom Search Button */
+.btn-search-custom {
+    background-color: #003366 !important;
+    border: none !important;
+    color: white !important;
+    border-radius: 0 12px 12px 0;
+    transition: 0.3s;
+}
+
+.btn-search-custom:hover i {
+    color: #ffc107 !important;
+}
+
+/* View Details button: Bordered Blue, Blue fill + Yellow text on hover */
+.btn-view-details {
+    border: 2px solid #003366 !important;
+    color: #003366 !important;
+    background-color: transparent !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-view-details:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+}
+
+/* "New Post" button matches "View Details" */
+.btn-new-post {
+    border: 2px solid #003366 !important;
+    color: #003366 !important;
+    background-color: transparent !important;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.btn-new-post:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+}
+
+/* ===== POST A JOB BOX: Yellow background + Blue shadow ===== */
+.post-job-card {
+    background-color: #ffc107 !important;
+    border: none !important;
+    box-shadow: 0 4px 12px rgba(0, 51, 102, 0.35) !important;
+    border-radius: 12px;
+}
+
+.post-job-card .fw-bold,
+.post-job-card h4 {
+    color: #003366 !important;
+}
+
+/* ===== JOB POST CARDS: Yellow shadow + hover glow ===== */
+.job-card-custom {
+    background-color: #edf3f8 !important;
+    border: 1px solid #b8d0e8 !important;
+    border-left: 4px solid #003366 !important;
+    border-radius: 12px;
+    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.3) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.job-card-custom:hover {
+    box-shadow: 0 6px 18px rgba(255, 193, 7, 0.5) !important;
+    transform: translateY(-2px);
+}
+
+/* ===== OPEN BADGE: Yellow bg, green text, green border ===== */
+.badge-open-custom {
+    background-color: #ffc107 !important;
+    color: #198754 !important;
+    border: 2px solid #198754 !important;
+    font-weight: bold;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+/* ===== REPORT AN ISSUE MODAL: Yellow header + body bg ===== */
+.report-modal-header {
+    background-color: #ffc107 !important;
+    color: #003366 !important;
+    border: none;
+}
+
+.report-modal-header .btn-close-white {
+    filter: none !important;
+}
+
+.report-modal-body {
+    background-color: #fff9e6 !important;
+}
+
+.report-modal-body .form-label {
+    color: #003366 !important;
+    font-weight: bold;
+}
+
+/* ===== DASHBOARD: Summary cards (Role, Bids, Posts, Email) - light yellow ===== */
+.dash-card {
+    background-color: #fff9e6 !important;
+    border: 2px solid #003366 !important;
+    border-radius: 12px;
+}
+
+.dash-card .card-body {
+    color: #003366 !important;
+}
+
+.dash-card .text-muted,
+.dash-card .small {
+    color: #003366 !important;
+    opacity: 0.8;
+}
+
+.dash-card .fw-bold,
+.dash-card h5,
+.dash-card h6,
+.dash-card p {
+    color: #003366 !important;
+}
+
+/* ===== DASHBOARD: Section cards (Messages, My Posts, Open Bids) - vivid yellow ===== */
+.dash-section {
+    background-color: #ffc107 !important;
+    border: 2px solid #003366 !important;
+    border-radius: 12px;
+}
+
+.dash-section .card-body > h5 {
+    color: #003366 !important;
+}
+
+.dash-section .fw-bold,
+.dash-section h5,
+.dash-section h6 {
+    color: #003366 !important;
+}
+
+/* Light mode card styling */
+.card {
+    border-radius: 12px;
+}
+
+.card .fw-bold {
+    color: #003366;
+}
+
+.card.shadow-sm.border-0 .card-body .small.mb-1 {
+    color: #6c757d;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #212529 !important;
+}
+
+.card.border-primary {
+    border-color: #003366 !important;
+}
+
+.bg-primary.text-white {
+    background-color: #003366 !important;
+}
+
+/* ===== PRIMARY BUTTONS ===== */
+.btn-primary {
+    background-color: #003366 !important;
+    border: none !important;
+    font-weight: bold;
+    color: #ffffff !important;
+    transition: 0.3s;
+}
+
+.btn-primary:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ===== OUTLINE BUTTONS ===== */
+.btn-outline-secondary {
+    color: #333 !important;
+    transition: 0.3s;
+}
+
+.btn-outline-secondary:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+    border-color: #003366 !important;
+}
+
+/* ===== DARK MODE ===== */
+body.dark-mode {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+body.dark-mode .mobile-container,
+body.dark-mode header,
+body.dark-mode .card,
+body.dark-mode #floatingMenu {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+    border-color: #333 !important;
+}
+
+body.dark-mode .job-card-custom {
+    background-color: #2c2c1e !important;
+    border: 1px solid #443c10 !important;
+    box-shadow: 0 3px 10px rgba(255, 193, 7, 0.2) !important;
+}
+
+body.dark-mode .text-muted {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .form-control {
+    background-color: #2b2b2b !important;
+    color: white !important;
+    border: 1px solid #444 !important;
+}
+
+body.dark-mode .form-control::placeholder {
+    color: #999 !important;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .sticky-bottom {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: white !important;
+}
+
+body.dark-mode .card {
+    background-color: #1e1e1e !important;
+    color: white !important;
+    border: 1px solid #333 !important;
+}
+
+body.dark-mode .card p,
+body.dark-mode .card h5,
+body.dark-mode .card h6,
+body.dark-mode .card .fw-bold,
+body.dark-mode .card .card-text,
+body.dark-mode .card .card-title,
+body.dark-mode .card-body {
+    color: #ffffff !important;
+}
+
+body.dark-mode .card .text-muted,
+body.dark-mode .card .small.text-muted {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .border.rounded.p-4.bg-white {
+    background-color: #2d2d2d !important;
+    border-color: #444 !important;
+}
+
+body.dark-mode #mainLogo {
+    filter: drop-shadow(0 0 5px rgba(255, 193, 7, 0.2));
+}
+
+body.dark-mode .badge.bg-secondary {
+    background-color: #3d3d3d !important;
+    color: #ffc107 !important;
+    border: 1px solid #ffc107 !important;
+}
+
+/* Dark mode menu */
+body.dark-mode #floatingMenu {
+    background-color: #1e1e1e !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode #floatingMenu h2 {
+    color: #ffffff !important;
+}
+
+body.dark-mode .btn-close {
+    filter: invert(85%) sepia(34%) saturate(2311%) hue-rotate(358deg) brightness(103%) contrast(104%) !important;
+    opacity: 1;
+}
+
+body.dark-mode .accordion-button {
+    background-color: #2d2d2d !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .accordion-button:not(.collapsed) {
+    color: #ffc107 !important;
+}
+
+body.dark-mode .text-primary {
+    color: #ffc107 !important;
+}
+
+body.dark-mode .form-select {
+    background-color: #2b2b2b !important;
+    border-color: #003366 !important;
+    color: white !important;
+}
+
+body.dark-mode .text-center.mt-4.small {
+    color: #b0b0b0 !important;
+}
+
+body.dark-mode .text-center.mt-4.small a {
+    color: #ffc107 !important;
+    font-weight: bold;
+}
+
+body.dark-mode .navbar,
+body.dark-mode .sticky-bottom,
+body.dark-mode .card-header {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .btn-outline-secondary {
+    color: #ffc107 !important;
+    border-color: #555 !important;
+}
+
+body.dark-mode .btn-outline-secondary:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+}
+
+body.dark-mode .list-group-item {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .sticky-bottom {
+    background-color: #1e1e1e !important;
+    box-shadow: 0 -5px 15px rgba(0, 0, 0, 0.5) !important;
+}
+
+body.dark-mode .input-group-text {
+    background-color: #333 !important;
+    border-color: #444 !important;
+    color: #ffc107 !important;
+}
+
+body.dark-mode .dropdown-menu {
+    background-color: #2d2d2d !important;
+    border: 1px solid #444 !important;
+}
+
+body.dark-mode .dropdown-item {
+    color: #ffffff !important;
+}
+
+body.dark-mode .dropdown-item:hover {
+    background-color: #003366 !important;
+    color: #ffc107 !important;
+}
+
+body.dark-mode .btn-light {
+    background-color: #333 !important;
+    border-color: #444 !important;
+    color: #ffffff !important;
+}
+
+body.dark-mode .job-card-custom:active {
+    background-color: #333225 !important;
+    box-shadow: 0 0 15px rgba(255, 193, 7, 0.3) !important;
+    transform: scale(0.98);
+}
+
+/* Dark mode dashboard summary cards (light yellow -> subtle dark) */
+body.dark-mode .dash-card {
+    background-color: #1e1e1e !important;
+    border-color: #ffc107 !important;
+}
+
+body.dark-mode .dash-card .card-body,
+body.dark-mode .dash-card .fw-bold,
+body.dark-mode .dash-card h5,
+body.dark-mode .dash-card h6,
+body.dark-mode .dash-card p,
+body.dark-mode .dash-card .text-muted,
+body.dark-mode .dash-card .small {
+    color: #ffc107 !important;
+}
+
+/* Dark mode dashboard section cards (vivid yellow -> deep amber) */
+body.dark-mode .dash-section {
+    background-color: #2a2200 !important;
+    border-color: #ffc107 !important;
+}
+
+body.dark-mode .dash-section .fw-bold,
+body.dark-mode .dash-section h5,
+body.dark-mode .dash-section h6 {
+    color: #ffc107 !important;
+}
+
+body.dark-mode .post-job-card {
+    background-color: #2a2200 !important;
+    border: 1px solid #ffc107 !important;
+}
+
+body.dark-mode .post-job-card .fw-bold,
+body.dark-mode .post-job-card h4 {
+    color: #ffc107 !important;
+}
+
+#mainLogo {
+    transition: opacity 0.2s ease-in-out;
+    mix-blend-mode: multiply;
+}
+
+body.dark-mode #mainLogo {
+    mix-blend-mode: screen;
+}
+
+body.dark-mode .bi-camera-fill {
+    color: #ffc107 !important;
+}

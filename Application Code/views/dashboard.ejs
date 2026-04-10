@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - HandymanHelper</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/ENSE-281_Lab7_stylesheet.css">
+</head>
+
+<body class="pb-5">
+  <div class="mobile-container">
+
+    <!-- _____ HEADER (matches marketplace) _____ -->
+    <header class="bg-white p-3 border-bottom sticky-top">
+      <div class="container">
+        <div class="text-center w-100">
+          <a href="/marketplace" class="css-logo">
+            <span class="logo-top">HANDYMAN</span>
+            <span class="logo-bottom">HELPER</span>
+          </a>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center mt-2 mb-1">
+          <div>
+            <h5 class="fw-bold mb-0">Welcome, <%= currentUser.firstName || currentUser.username %></h5>
+            <small class="text-muted">This is your personal dashboard.</small>
+          </div>
+          <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse"
+            data-bs-target="#floatingMenu">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+
+    <!-- _____ MAIN CONTENT _____ -->
+    <main class="container mt-4">
+
+      <!-- Verification Status (ALL users, not just contractors) -->
+      <div class="card shadow-sm border-0 mb-3">
+        <div class="card-body">
+          <h6 class="fw-bold text-muted mb-2">Verification Status</h6>
+          <% if (currentUser.isVerified) { %>
+            <span class="badge bg-success fs-6"><i class="bi bi-patch-check-fill me-1"></i> Verified</span>
+          <% } else { %>
+            <span class="badge bg-warning text-dark fs-6"><i class="bi bi-exclamation-triangle-fill me-1"></i> Not Verified</span>
+            <button type="button" class="btn btn-sm btn-primary ms-2" data-bs-toggle="modal" data-bs-target="#verifyModal">Get Verified</button>
+            <p class="text-muted small mt-2 mb-0">Upload a photo of your license or enter the invite code to verify.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Summary Cards -->
+      <div class="row g-3 mb-3">
+        <div class="col-4">
+          <div class="card dash-card text-center">
+            <div class="card-body py-3">
+              <h6 class="small mb-1">Role</h6>
+              <p class="fw-bold mb-0"><%= currentUser.role %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card dash-card text-center">
+            <div class="card-body py-3">
+              <h6 class="small mb-1">Bids Placed</h6>
+              <p class="fw-bold mb-0"><%= numberOfBidsPlaced %></p>
+            </div>
+          </div>
+        </div>
+        <div class="col-4">
+          <div class="card dash-card text-center">
+            <div class="card-body py-3">
+              <h6 class="small mb-1">Posts Created</h6>
+              <p class="fw-bold mb-0"><%= numberOfPostsCreated %></p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Email -->
+      <div class="card dash-card mb-3">
+        <div class="card-body py-3">
+          <h6 class="small mb-1">Email</h6>
+          <p class="fw-bold mb-0"><%= currentUser.username %></p>
+        </div>
+      </div>
+
+      <!-- My Messages -->
+      <div class="card dash-section mb-3">
+        <div class="card-body">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <h5 class="fw-bold mb-0"><i class="bi bi-envelope me-2"></i>My Messages</h5>
+            <button class="btn btn-sm btn-new-post" type="button" onclick="closeMenuThenModal('messagesModal')">
+              View All
+            </button>
+          </div>
+          <% if (messages && messages.length > 0) { %>
+            <% var recentMsgs = messages.slice(0, 3); %>
+            <% recentMsgs.forEach(function(msg) { %>
+              <% var otherPerson = msg.from === currentUser.username ? msg.to : msg.from; %>
+              <div class="card job-card-custom mb-2" style="cursor: pointer;" onclick="openMsgConvo('<%= otherPerson.replace(/'/g, "\\'") %>')">
+                <div class="card-body py-2 px-3">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <strong class="text-primary text-truncate"><%= msg.subject %></strong>
+                    <small class="text-muted"><%= new Date(msg.createdAt).toLocaleDateString() %></small>
+                  </div>
+                  <p class="text-muted small mb-1 text-truncate"><%= msg.body %></p>
+                  <small class="text-muted"><%= msg.from === currentUser.username ? 'To: ' + msg.to : 'From: ' + msg.from %></small>
+                </div>
+              </div>
+            <% }) %>
+            <% if (messages.length > 3) { %>
+              <p class="text-muted small text-center mt-2 mb-0">+ <%= messages.length - 3 %> more messages</p>
+            <% } %>
+          <% } else { %>
+            <p class="text-muted fst-italic">No messages yet.</p>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- My Posts -->
+      <div class="card dash-section mb-3">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">My Posts</h5>
+          <% if (myPosts.length === 0) { %>
+            <p class="text-muted fst-italic">You have not created any posts yet.</p>
+          <% } else { %>
+            <% myPosts.forEach(function(post) { %>
+              <a href="/job-details/<%= post._id %>?username=<%= currentUser.username %>" class="text-decoration-none">
+                <div class="card job-card-custom mb-2" style="cursor: pointer;">
+                  <div class="card-body py-2 px-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h6 class="fw-bold mb-0 text-truncate"><%= post.title %></h6>
+                      <span class="text-success fw-bold">$<%= post.startingBid || post.flatRate || 0 %></span>
+                    </div>
+                    <p class="text-muted small mb-1 text-truncate"><%= post.description %></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="badge <%= post.status === 'OPEN' ? 'bg-success' : 'bg-danger' %>"><%= post.status %></span>
+                      <small class="text-muted"><%= post.bids.length %> bid(s)</small>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Currently Open Bids -->
+      <div class="card dash-section mb-3">
+        <div class="card-body">
+          <h5 class="fw-bold mb-3">Currently Open Bids</h5>
+          <% if (jobsIBidOn.length === 0) { %>
+            <p class="text-muted fst-italic">You have not placed any bids yet.</p>
+          <% } else { %>
+            <% jobsIBidOn.forEach(function(job) { %>
+              <a href="/job-details/<%= job._id %>?username=<%= currentUser.username %>" class="text-decoration-none">
+                <div class="card job-card-custom mb-2" style="cursor: pointer;">
+                  <div class="card-body py-2 px-3">
+                    <div class="d-flex justify-content-between align-items-center">
+                      <h6 class="fw-bold mb-0 text-truncate"><%= job.title %></h6>
+                      <span class="text-success fw-bold">$<%= job.startingBid || job.flatRate || 0 %></span>
+                    </div>
+                    <p class="text-muted small mb-1">Client: <%= job.client %></p>
+                    <div class="d-flex justify-content-between align-items-center">
+                      <span class="badge <%= job.status === 'OPEN' ? 'bg-success' : 'bg-danger' %>"><%= job.status %></span>
+                      <small class="text-muted">
+                        My bid(s):
+                        <% job.bids.filter(function(bid) { return bid.contractor === currentUser.username; }).forEach(function(bid) { %>
+                          $<%= bid.amount %>
+                        <% }) %>
+                      </small>
+                    </div>
+                  </div>
+                </div>
+              </a>
+            <% }) %>
+          <% } %>
+        </div>
+      </div>
+
+      <!-- Bottom Actions -->
+      <div class="d-flex gap-2 mt-3">
+        <form action="/marketplace" method="POST" class="flex-grow-1">
+          <input type="hidden" name="username" value="<%= currentUser.username %>">
+          <button type="submit" class="btn btn-outline-secondary w-100 py-2">Back to Marketplace</button>
+        </form>
+        <a href="/logout" class="btn btn-primary flex-grow-1 py-2">Logout</a>
+      </div>
+
+    </main>
+
+
+    <!-- _____ VERIFICATION MODAL (for ALL unverified users) _____ -->
+    <% if (!currentUser.isVerified) { %>
+    <div class="modal fade" id="verifyModal" tabindex="-1" aria-labelledby="verifyModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+
+          <!-- Modal Header -->
+          <div class="modal-header bg-primary text-white border-0">
+            <h5 class="modal-title fw-bold" id="verifyModalLabel">
+              <i class="bi bi-shield-check me-2"></i>Choose one of two options to get verified:
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+
+          <div class="modal-body p-4">
+
+            <!-- MANDATORY: First Name -->
+            <div class="mb-3">
+              <label class="form-label fw-bold text-primary"><i class="bi bi-person-fill me-1"></i> First Name <span class="text-danger">*</span></label>
+              <input type="text" id="modalFirstName" class="form-control form-control-lg" placeholder="Enter your first name" required>
+              <small class="text-muted">This is required for verification.</small>
+            </div>
+
+            <!-- OPTION 1: Upload License Photo -->
+            <div class="card border-primary mb-3">
+              <div class="card-body text-center">
+                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-camera-fill me-1"></i> Option 1: Upload License Photo</h6>
+                <form id="photoVerifyForm" action="/verify" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="username" value="<%= currentUser.username %>">
+                  <input type="hidden" name="firstName" id="modalPhotoFirstName" value="">
+                  <input type="hidden" name="licenseNumber" value="PHOTO-UPLOAD">
+                  <input type="hidden" name="verificationCode" value="">
+                  <div class="border rounded p-3 bg-light mb-3">
+                    <i class="bi bi-cloud-arrow-up display-5 text-primary"></i>
+                    <input type="file" name="licenseImage" class="form-control mt-2" accept="image/*" capture="camera" required>
+                    <small class="text-muted d-block mt-1">Take a photo or upload your trade license</small>
+                  </div>
+                  <button type="button" class="btn btn-primary w-100 fw-bold py-2" onclick="submitWithAnimation('photoVerifyForm')">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+
+            <!-- OR Divider -->
+            <div class="text-center my-3">
+              <span class="fw-bold fs-5 text-muted">OR</span>
+            </div>
+
+            <!-- OPTION 2: Enter Invite Code -->
+            <div class="card border-primary">
+              <div class="card-body text-center">
+                <h6 class="fw-bold text-primary mb-3"><i class="bi bi-key-fill me-1"></i> Option 2: Invite Code</h6>
+                <p class="text-muted small mb-3">If you've received the invite code, please enter it below:</p>
+                <form id="codeVerifyForm" action="/verify" method="post" enctype="multipart/form-data">
+                  <input type="hidden" name="username" value="<%= currentUser.username %>">
+                  <input type="hidden" name="firstName" id="modalCodeFirstName" value="">
+                  <input type="hidden" name="licenseNumber" value="CODE-VERIFY">
+                  <input type="text" name="verificationCode" class="form-control form-control-lg text-center mb-3"
+                    placeholder="Enter invite code" required>
+                  <button type="button" class="btn btn-primary w-100 fw-bold py-2" onclick="submitWithAnimation('codeVerifyForm')">
+                    Submit
+                  </button>
+                </form>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Validating Overlay -->
+    <div class="modal fade" id="validatingModal" tabindex="-1" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow text-center p-4">
+          <div class="spinner-border text-primary mx-auto mb-3" role="status" style="width: 3rem; height: 3rem;"></div>
+          <h5 class="fw-bold" id="validatingTitle">Validating Account.</h5>
+          <p class="text-muted mb-0" id="validatingDots">Rendering..</p>
+        </div>
+      </div>
+    </div>
+    <% } %>
+
+
+    <!-- _____ MESSAGES MODAL _____ -->
+    <div class="modal fade" id="messagesModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white border-0">
+            <h5 class="modal-title fw-bold"><i class="bi bi-envelope me-2"></i>My Messages</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="dropdown mb-3">
+              <button class="btn btn-outline-primary w-100 dropdown-toggle" data-bs-toggle="dropdown">Sort Messages</button>
+              <ul class="dropdown-menu w-100">
+                <li><button class="dropdown-item" onclick="loadMessages('newest')">Newest to Oldest</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('oldest')">Oldest to Newest</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('open_jobs')">Currently Open Jobs</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('closed_jobs')">Closed Jobs</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('current_bids')">Current Bids</button></li>
+              </ul>
+            </div>
+            <div id="messagesList">
+              <p class="text-muted text-center fst-italic">Loading messages...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- _____ REPORT AN ISSUE MODAL _____ -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header report-modal-header border-0">
+            <h5 class="modal-title fw-bold" style="color: #003366 !important;"><i class="bi bi-flag me-2"></i>Report an Issue</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body report-modal-body" id="reportBody">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Subject</label>
+              <input type="text" id="reportSubject" class="form-control" placeholder="Brief description of the issue" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Description</label>
+              <textarea id="reportDescription" class="form-control" rows="4" placeholder="Describe your issue in detail..." required></textarea>
+            </div>
+            <button type="button" class="btn btn-primary w-100 fw-bold" onclick="submitReport()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- _____ FLOATING MENU _____ -->
+    <div class="collapse fixed-top w-100 h-100 bg-white shadow-lg overflow-auto" id="floatingMenu"
+      style="z-index: 1060; padding-top: 80px;">
+      <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold text-primary">Menu</h2>
+          <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#floatingMenu"></button>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+          <span class="fw-bold"><i class="bi bi-moon-stars me-2"></i> Dark Mode</span>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="darkModeToggle"
+              style="transform: scale(1.5); cursor: pointer;">
+          </div>
+        </div>
+
+        <div class="d-grid gap-3">
+          <form action="/marketplace" method="POST">
+            <input type="hidden" name="username" value="<%= currentUser.username %>">
+            <button type="submit" class="btn btn-outline-secondary w-100 py-3 text-start">
+              <i class="bi bi-shop me-2"></i> Back to Marketplace
+            </button>
+          </form>
+
+          <button class="btn btn-outline-secondary w-100 py-3 text-start" onclick="closeMenuThenModal('messagesModal')">
+            <i class="bi bi-envelope me-2"></i> My Messages
+          </button>
+
+          <button class="btn btn-outline-warning w-100 py-3 text-start" onclick="closeMenuThenModal('reportModal')">
+            <i class="bi bi-exclamation-triangle me-2"></i> Report an Issue
+          </button>
+
+          <hr>
+          <a href="/logout" class="btn btn-danger py-3">Logout</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // _____ DARK MODE _____
+    var body = document.body;
+    var darkModeToggle = document.getElementById('darkModeToggle');
+
+    var savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-mode');
+      if (darkModeToggle) darkModeToggle.checked = true;
+    }
+
+    if (darkModeToggle) {
+      darkModeToggle.addEventListener('change', function() {
+        if (darkModeToggle.checked) {
+          body.classList.add('dark-mode');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark-mode');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+    }
+
+
+    // _____ CLOSE MENU THEN OPEN MODAL _____
+    function closeMenuThenModal(modalId) {
+      var menu = document.getElementById('floatingMenu');
+      if (menu.classList.contains('show')) {
+        var collapse = bootstrap.Collapse.getInstance(menu);
+        if (collapse) collapse.hide();
+      }
+      setTimeout(function() {
+        var modal = new bootstrap.Modal(document.getElementById(modalId));
+        modal.show();
+      }, 350);
+    }
+
+
+    // _____ VERIFICATION ANIMATION _____
+    function submitWithAnimation(formId) {
+      var firstNameInput = document.getElementById('modalFirstName');
+      var firstName = firstNameInput ? firstNameInput.value.trim() : '';
+
+      if (!firstName) {
+        firstNameInput.classList.add('is-invalid');
+        firstNameInput.focus();
+        return;
+      }
+      firstNameInput.classList.remove('is-invalid');
+
+      var photoHidden = document.getElementById('modalPhotoFirstName');
+      var codeHidden = document.getElementById('modalCodeFirstName');
+      if (photoHidden) photoHidden.value = firstName;
+      if (codeHidden) codeHidden.value = firstName;
+
+      var form = document.getElementById(formId);
+      var verifyModal = bootstrap.Modal.getInstance(document.getElementById('verifyModal'));
+      var validatingModal = new bootstrap.Modal(document.getElementById('validatingModal'));
+      var title = document.getElementById('validatingTitle');
+      var dots = document.getElementById('validatingDots');
+
+      verifyModal.hide();
+
+      setTimeout(function() {
+        validatingModal.show();
+        title.textContent = 'Validating Account.';
+        dots.textContent = 'Rendering..';
+
+        setTimeout(function() {
+          title.textContent = 'Validating Account.';
+          dots.textContent = 'Rendering...';
+
+          setTimeout(function() {
+            title.textContent = 'Validating Account.';
+            dots.textContent = 'Rendering..';
+
+            setTimeout(function() {
+              form.submit();
+            }, 400);
+          }, 400);
+        }, 500);
+      }, 300);
+    }
+
+
+    // _____ OPEN CONVERSATION FROM DASHBOARD PREVIEW _____
+    function openMsgConvo(otherPerson) {
+      // Fetch messages first, then open modal with that conversation
+      fetch('/messages?username=' + encodeURIComponent('<%= currentUser.username %>') + '&sort=newest')
+        .then(function(r) { return r.json(); })
+        .then(function(msgs) {
+          allMessages = msgs;
+          var modal = new bootstrap.Modal(document.getElementById('messagesModal'));
+          modal.show();
+          setTimeout(function() { openConversation(otherPerson); }, 200);
+        });
+    }
+
+    // _____ MESSAGES _____
+    var allMessages = [];
+    var messagesModal = document.getElementById('messagesModal');
+    if (messagesModal) {
+      messagesModal.addEventListener('show.bs.modal', function() {
+        if (allMessages.length === 0) loadMessages('newest');
+      });
+    }
+
+    function loadMessages(sortBy) {
+      var username = '<%= currentUser.username %>';
+      fetch('/messages?username=' + encodeURIComponent(username) + '&sort=' + sortBy)
+        .then(function(r) { return r.json(); })
+        .then(function(msgs) {
+          allMessages = msgs;
+          var container = document.getElementById('messagesList');
+          if (msgs.length === 0) {
+            container.innerHTML = '<p class="text-muted text-center fst-italic">No messages yet.</p>';
+            return;
+          }
+          var html = '';
+          msgs.forEach(function(msg) {
+            var isSent = msg.from === username;
+            var otherPerson = isSent ? msg.to : msg.from;
+            html += '<div class="card mb-2 border-0 shadow-sm" style="cursor:pointer;" onclick="openConversation(\'' + otherPerson.replace(/'/g, "\\'") + '\')">';
+            html += '<div class="card-body py-2 px-3">';
+            html += '<div class="d-flex justify-content-between"><strong class="text-primary">' + msg.subject + '</strong>';
+            html += '<small class="text-muted">' + new Date(msg.createdAt).toLocaleDateString() + '</small></div>';
+            html += '<p class="small mb-1 text-truncate">' + msg.body + '</p>';
+            html += '<small class="text-muted">' + (isSent ? 'To: ' + msg.to : 'From: ' + msg.from) + '</small>';
+            html += '</div></div>';
+          });
+          container.innerHTML = html;
+        });
+    }
+
+    function openConversation(otherPerson) {
+      var username = '<%= currentUser.username %>';
+      var convo = allMessages.filter(function(m) {
+        return (m.from === otherPerson && m.to === username) || (m.from === username && m.to === otherPerson);
+      });
+      convo.sort(function(a, b) { return new Date(a.createdAt) - new Date(b.createdAt); });
+
+      var html = '<button class="btn btn-sm btn-outline-secondary mb-3" onclick="loadMessages(\'newest\')"><i class="bi bi-arrow-left me-1"></i> Back</button>';
+      html += '<h6 class="fw-bold text-primary mb-3">Conversation with ' + otherPerson + '</h6>';
+
+      if (convo.length === 0) {
+        html += '<p class="text-muted fst-italic">No messages in this conversation.</p>';
+      } else {
+        convo.forEach(function(msg) {
+          var isMine = msg.from === username;
+          html += '<div class="d-flex ' + (isMine ? 'justify-content-end' : 'justify-content-start') + ' mb-2">';
+          html += '<div class="card border-0 shadow-sm" style="max-width: 85%; background:' + (isMine ? '#003366' : '#edf3f8') + ';">';
+          html += '<div class="card-body py-2 px-3">';
+          html += '<strong style="color:' + (isMine ? '#ffc107' : '#003366') + '; font-size: 0.8rem;">' + msg.subject + '</strong>';
+          html += '<p class="small mb-1" style="color:' + (isMine ? '#ffffff' : '#333') + ';">' + msg.body + '</p>';
+          html += '<small style="color:' + (isMine ? '#aaa' : '#999') + ';">' + new Date(msg.createdAt).toLocaleString() + '</small>';
+          html += '</div></div></div>';
+        });
+      }
+
+      html += '<hr>';
+      html += '<div class="mb-2"><input type="text" id="replySubject" class="form-control form-control-sm" placeholder="Subject" value="Re: ' + (convo.length > 0 ? convo[convo.length-1].subject.replace(/^Re: /, '') : '') + '"></div>';
+      html += '<div class="input-group">';
+      html += '<textarea id="replyBody" class="form-control" rows="2" placeholder="Type a reply..."></textarea>';
+      html += '<button class="btn btn-primary" onclick="sendReply(\'' + otherPerson.replace(/'/g, "\\'") + '\')"><i class="bi bi-send"></i></button>';
+      html += '</div>';
+
+      document.getElementById('messagesList').innerHTML = html;
+    }
+
+    function sendReply(toUser) {
+      var subject = document.getElementById('replySubject').value.trim();
+      var body = document.getElementById('replyBody').value.trim();
+      if (!body) return;
+      if (!subject) subject = 'Message';
+
+      fetch('/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: '<%= currentUser.username %>',
+          to: toUser,
+          subject: subject,
+          body: body
+        })
+      }).then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            fetch('/messages?username=' + encodeURIComponent('<%= currentUser.username %>') + '&sort=newest')
+              .then(function(r) { return r.json(); })
+              .then(function(msgs) {
+                allMessages = msgs;
+                openConversation(toUser);
+              });
+          }
+        });
+    }
+
+
+    // _____ REPORT _____
+    function submitReport() {
+      var subject = document.getElementById('reportSubject').value.trim();
+      var description = document.getElementById('reportDescription').value.trim();
+      if (!subject || !description) return;
+
+      fetch('/report-issue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: '<%= currentUser.username %>', subject: subject, description: description })
+      }).then(function() {
+        document.getElementById('reportBody').innerHTML =
+          '<div class="text-center py-4">' +
+          '<i class="bi bi-check-circle-fill display-3 text-success mb-3"></i>' +
+          '<h5 class="fw-bold">Thank you!</h5>' +
+          '<p class="text-muted">Replies from administration takes 3-5 business days.</p>' +
+          '<p class="text-muted">Thank you for your patience.</p>' +
+          '</div>';
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

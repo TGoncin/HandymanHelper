@@ -1,0 +1,113 @@
+[
+  {
+    "_id": 1,
+    "text": "Note1",
+    "creator": {
+      "username": "Tommy@NoteVote.com",
+      "password": "Goncin"
+    },
+    "upvotes": [
+      {
+        "username": "Tommy@NoteVote.com",
+        "password": "Goncin"
+      }
+    ],
+    "downvotes": [
+      {
+        "username": "Nikola@NoteVote.com",
+        "password": "Goncin"
+      },
+      {
+        "username": "Una@NoteVote.com",
+        "password": "Goncin"
+      },
+      {
+        "username": "Tom@NoteVote.com",
+        "password": "Goncin"
+      }
+    ]
+  },
+  {
+    "_id": 2,
+    "text": "Note2",
+    "creator": {
+      "username": "Nikola@NoteVote.com",
+      "password": "Goncin"
+    },
+    "upvotes": [
+      {
+        "username": "Una@NoteVote.com",
+        "password": "Goncin"
+      },
+      {
+        "username": "Tom@NoteVote.com",
+        "password": "Goncin"
+      }
+    ],
+    "downvotes": []
+  },
+  {
+    "_id": 3,
+    "text": "Note3",
+    "creator": {
+      "username": "Una@NoteVote.com",
+      "password": "Goncin"
+    },
+    "upvotes": [
+      {
+        "username": "Una@NoteVote.com",
+        "password": "Goncin"
+      },
+      {
+        "username": "Tom@NoteVote.com",
+        "password": "Goncin"
+      }
+    ],
+    "downvotes": []
+  },
+  {
+    "_id": 4,
+    "text": "Note4",
+    "creator": {
+      "username": "Tom@NoteVote.com",
+      "password": "Goncin"
+    },
+    "upvotes": [],
+    "downvotes": [
+      {
+        "username": "Tom@NoteVote.com",
+        "password": "Goncin"
+      }
+    ]
+  },
+  {
+    "_id": 5,
+    "text": "Note5",
+    "creator": {
+      "username": "AccountCreatedThroughRegistery@NoteVote.ca",
+      "password": "Goncin"
+    },
+    "upvotes": [],
+    "downvotes": []
+  },
+  {
+    "_id": 6,
+    "text": "The oldest surviving epic poem we know of is the Epic of Gilgamesh, from ancient Mesopotamia, dating to roughly the 3rd millennium BCE (about 4,000–4,500 years ago).",
+    "creator": {
+      "username": "AccountCreatedThroughRegistery@NoteVote.ca",
+      "password": "Goncin"
+    },
+    "upvotes": [],
+    "downvotes": []
+  },
+  {
+    "_id": 7,
+    "text": "The oldest surviving epic poem we know of is the Epic of Gilgamesh, from ancient Mesopotamia, dating to roughly the 3rd millennium BCE (about 4,000–4,500 years ago). ",
+    "creator": {
+      "username": "AccountCreatedThroughRegistery@NoteVote.ca",
+      "password": "Goncin"
+    },
+    "upvotes": [],
+    "downvotes": []
+  }
+]

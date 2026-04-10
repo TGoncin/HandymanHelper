@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HandymanHelper Marketplace</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+  <link rel="stylesheet" href="/ENSE-281_Lab7_stylesheet.css">
+</head>
+
+<body class="pb-5">
+  <div class="mobile-container">
+
+    <header class="bg-white p-3 sticky-top">
+      <div class="container">
+        <div class="text-center w-100">
+          <a href="/marketplace?username=<%= currentUser.username %>" class="css-logo">
+            <span class="logo-top">HANDYMAN</span>
+            <span class="logo-bottom">HELPER</span>
+          </a>
+        </div>
+
+        <div class="mt-2 mb-1 text-start">
+          <small class="text-muted">Hello, <strong><%= currentUser.firstName || currentUser.username %></strong>!</small>
+        </div>
+
+        <div class="d-flex gap-2">
+          <form action="/marketplace" method="POST" class="flex-grow-1">
+            <input type="hidden" name="username" value="<%= currentUser.username %>">
+            <div class="input-group shadow-sm">
+              <input type="text" name="search" class="form-control" placeholder="Search tasks..." value="<%= searchQuery %>">
+              <button class="btn btn-search-custom" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+          </form>
+          <button class="btn btn-outline-primary" type="button" data-bs-toggle="collapse" data-bs-target="#floatingMenu">
+            <i class="bi bi-list"></i>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container mt-4">
+
+      <!-- Post a Job (verified users only, both CLIENT and CONTRACTOR) -->
+      <% if (currentUser.isVerified) { %>
+        <div class="card post-job-card mb-4">
+          <div class="card-body">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <h4 class="fw-bold mb-0">Post a Job</h4>
+              <button class="btn btn-sm btn-new-post" type="button" data-bs-toggle="collapse" data-bs-target="#createJobForm">New Post</button>
+            </div>
+
+            <div class="collapse" id="createJobForm">
+              <form action="/addpost" method="POST" enctype="multipart/form-data" class="row g-3">
+                <input type="hidden" name="username" value="<%= currentUser.username %>">
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Job Title</label>
+                  <input type="text" name="title" class="form-control" placeholder="e.g. Fix leaking kitchen sink" required>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Photos (up to 5)</label>
+                  <input type="file" name="photos" class="form-control" accept="image/*" multiple>
+                  <small class="text-muted">Optional. Select up to 5 images.</small>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Description</label>
+                  <textarea name="description" class="form-control" rows="4" placeholder="Describe the work needed..." required></textarea>
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label fw-semibold">Starting Bid</label>
+                  <input type="number" name="startingBid" class="form-control" min="0" step="1" placeholder="e.g. 150">
+                  <small class="text-muted">Minimum bid amount</small>
+                </div>
+
+                <div class="col-6">
+                  <label class="form-label fw-semibold">Accepted Flat Rate</label>
+                  <input type="number" name="flatRate" class="form-control" min="0" step="1" placeholder="e.g. 300">
+                  <small class="text-muted">Buy-it-now price</small>
+                </div>
+
+                <div class="col-12">
+                  <label class="form-label fw-semibold">Category</label>
+                  <select name="category" class="form-select">
+                    <option value="General">General</option>
+                    <option value="Plumbing">Plumbing</option>
+                    <option value="Electrical">Electrical</option>
+                    <option value="Carpentry">Carpentry</option>
+                    <option value="Cleaning">Cleaning</option>
+                  </select>
+                </div>
+
+                <div class="col-12">
+                  <button type="submit" class="btn btn-primary w-100 py-2 fw-semibold">Post Job</button>
+                </div>
+
+                <div class="col-12">
+                  <button type="button" class="btn btn-outline-secondary w-100 py-2" onclick="window.location.reload()">Back to Marketplace</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      <% } else { %>
+        <div class="card shadow-sm border-0 mb-4">
+          <div class="card-body text-center py-3">
+            <p class="text-muted mb-2">You must be verified to post jobs.</p>
+            <a href="/verify-page?username=<%= currentUser.username %>" class="btn btn-primary btn-sm">Get Verified</a>
+          </div>
+        </div>
+      <% } %>
+
+      <!-- Marketplace Header -->
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h3 class="fw-bold mb-0"><%= viewMode === 'MY_POSTS' ? 'My Posts' : 'Marketplace' %></h3>
+        <span class="badge bg-secondary"><%= totalAds %> Ads</span>
+      </div>
+
+      <!-- Job Cards -->
+      <div class="row g-3">
+        <% jobs.forEach(function(job) { %>
+          <div class="col-12">
+            <div class="card shadow-sm job-card-custom h-100">
+              <div class="card-body">
+                <div class="d-flex justify-content-between">
+                  <h5 class="card-title fw-bold text-truncate"><%= job.title %></h5>
+                  <span class="text-success fw-bold">
+                    $<%= job.startingBid || job.flatRate || 0 %>
+                  </span>
+                </div>
+
+                <% if (job.photos && job.photos.length > 0) { %>
+                  <div class="mb-2">
+                    <img src="/uploads/<%= job.photos[0] %>" alt="Job photo" class="img-fluid rounded" style="max-height: 150px; width: 100%; object-fit: cover;">
+                  </div>
+                <% } %>
+
+                <p class="card-text text-muted small mb-2" style="display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"><%= job.description %></p>
+
+                <div class="small text-muted mb-2">
+                  <span class="me-2"><strong>Category:</strong> <%= job.category || "General" %></span>
+                  <span><strong>Posted by:</strong> <%= job.client %></span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                  <span class="<%= job.status === 'OPEN' ? 'badge-open-custom' : 'badge bg-secondary' %>"><%= job.status %></span>
+
+                  <div class="d-flex gap-1">
+                    <!-- Message button -->
+                    <% if (job.client !== currentUser.username) { %>
+                      <button type="button" class="btn btn-sm btn-outline-primary border-0"
+                        onclick="openMessageModal('<%= job.client %>', '<%= job._id %>', 'client')">
+                        <i class="bi bi-chat-dots"></i>
+                      </button>
+                    <% } %>
+
+                    <form action="/job-details" method="POST" class="d-inline">
+                      <input type="hidden" name="username" value="<%= currentUser.username %>">
+                      <input type="hidden" name="postId" value="<%= job._id %>">
+                      <button type="submit" class="btn btn-sm btn-view-details px-4">View Details</button>
+                    </form>
+
+                    <% if (viewMode === 'MY_POSTS' || job.client === currentUser.username) { %>
+                      <form action="/delete-post" method="POST" class="d-inline">
+                        <input type="hidden" name="username" value="<%= currentUser.username %>">
+                        <input type="hidden" name="postId" value="<%= job._id %>">
+                        <button type="submit" class="btn btn-sm btn-outline-danger border-0" onclick="return confirm('Delete this post?')">
+                          <i class="bi bi-trash"></i>
+                        </button>
+                      </form>
+                    <% } %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% }) %>
+      </div>
+
+      <!-- No results -->
+      <% if (jobs.length === 0) { %>
+        <div class="text-center py-5">
+          <i class="bi bi-search display-3 text-muted"></i>
+          <p class="text-muted mt-3">No jobs found matching your filters.</p>
+          <a href="/marketplace?username=<%= currentUser.username %>" class="btn btn-outline-primary">Clear Filters</a>
+        </div>
+      <% } %>
+
+      <!-- Pagination -->
+      <% if (totalPages > 1) { %>
+        <nav class="mt-4">
+          <ul class="pagination justify-content-center">
+            <% for (var p = 1; p <= totalPages; p++) { %>
+              <li class="page-item <%= p === currentPage ? 'active' : '' %>">
+                <form action="/marketplace" method="POST" class="d-inline">
+                  <input type="hidden" name="username" value="<%= currentUser.username %>">
+                  <input type="hidden" name="page" value="<%= p %>">
+                  <button type="submit" class="page-link"><%= p %></button>
+                </form>
+              </li>
+            <% } %>
+          </ul>
+        </nav>
+      <% } %>
+
+    </main>
+
+    <!-- _____ FLOATING MENU _____ -->
+    <div class="collapse fixed-top w-100 h-100 bg-white shadow-lg overflow-auto" id="floatingMenu" style="z-index: 1060; padding-top: 80px;">
+      <div class="container py-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h2 class="fw-bold text-primary">Menu</h2>
+          <button class="btn-close" type="button" data-bs-toggle="collapse" data-bs-target="#floatingMenu"></button>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center py-3 border-bottom">
+          <span class="fw-bold"><i class="bi bi-moon-stars me-2"></i> Dark Mode</span>
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="darkModeToggle" style="transform: scale(1.5); cursor: pointer;">
+          </div>
+        </div>
+
+        <div class="d-grid gap-3">
+
+          <!-- Filters Accordion -->
+          <div class="accordion" id="filterAccordion">
+            <div class="accordion-item border-primary">
+              <h2 class="accordion-header">
+                <button class="accordion-button collapsed fw-bold text-primary" type="button" data-bs-toggle="collapse" data-bs-target="#filterCollapse">
+                  <i class="bi bi-funnel me-2"></i> Filter
+                </button>
+              </h2>
+              <div id="filterCollapse" class="accordion-collapse collapse" data-bs-parent="#filterAccordion">
+                <div class="accordion-body d-grid gap-2">
+
+                  <!-- Price Filter -->
+                  <div class="dropdown">
+                    <button class="btn btn-light w-100 text-start dropdown-toggle" data-bs-toggle="dropdown">
+                      <i class="bi bi-currency-dollar me-1"></i> By Price
+                    </button>
+                    <ul class="dropdown-menu w-100">
+                      <li>
+                        <form action="/marketplace" method="POST">
+                          <input type="hidden" name="username" value="<%= currentUser.username %>">
+                          <input type="hidden" name="sort" value="desc">
+                          <button type="submit" class="dropdown-item">Highest Price</button>
+                        </form>
+                      </li>
+                      <li>
+                        <form action="/marketplace" method="POST">
+                          <input type="hidden" name="username" value="<%= currentUser.username %>">
+                          <input type="hidden" name="sort" value="asc">
+                          <button type="submit" class="dropdown-item">Lowest Price</button>
+                        </form>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><button class="dropdown-item" type="button" onclick="closeMenuThenModal('priceRangeModal')">Price Range...</button></li>
+                    </ul>
+                  </div>
+
+                  <!-- Category Filter -->
+                  <div class="dropdown">
+                    <button class="btn btn-light w-100 text-start dropdown-toggle" data-bs-toggle="dropdown">
+                      <i class="bi bi-tag me-1"></i> By Category
+                    </button>
+                    <ul class="dropdown-menu w-100">
+                      <% ["General", "Plumbing", "Electrical", "Carpentry", "Cleaning"].forEach(function(cat) { %>
+                        <li>
+                          <form action="/marketplace" method="POST">
+                            <input type="hidden" name="username" value="<%= currentUser.username %>">
+                            <input type="hidden" name="category" value="<%= cat %>">
+                            <button type="submit" class="dropdown-item <%= selectedCategory === cat ? 'active' : '' %>"><%= cat %></button>
+                          </form>
+                        </li>
+                      <% }) %>
+                    </ul>
+                  </div>
+
+                  <!-- Bidding Filter -->
+                  <div class="dropdown">
+                    <button class="btn btn-light w-100 text-start dropdown-toggle" data-bs-toggle="dropdown">
+                      <i class="bi bi-cash-stack me-1"></i> By Bidding
+                    </button>
+                    <ul class="dropdown-menu w-100">
+                      <li>
+                        <form action="/marketplace" method="POST">
+                          <input type="hidden" name="username" value="<%= currentUser.username %>">
+                          <input type="hidden" name="biddingFilter" value="BIDS_ONLY">
+                          <button type="submit" class="dropdown-item">Biddings Only</button>
+                        </form>
+                      </li>
+                      <li>
+                        <form action="/marketplace" method="POST">
+                          <input type="hidden" name="username" value="<%= currentUser.username %>">
+                          <input type="hidden" name="sort" value="ending_soon">
+                          <button type="submit" class="dropdown-item">Ending Soon</button>
+                        </form>
+                      </li>
+                      <li><hr class="dropdown-divider"></li>
+                      <li><button class="dropdown-item" type="button" onclick="closeMenuThenModal('bidRangeModal')">Choose Range...</button></li>
+                    </ul>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <form action="/marketplace" method="POST">
+            <input type="hidden" name="username" value="<%= currentUser.username %>">
+            <button type="submit" class="btn btn-outline-secondary w-100 py-3 text-start">
+              <i class="bi bi-house me-2"></i> All Posts
+            </button>
+          </form>
+
+          <form action="/marketplace" method="POST">
+            <input type="hidden" name="username" value="<%= currentUser.username %>">
+            <input type="hidden" name="viewMode" value="MY_POSTS">
+            <button type="submit" class="btn btn-outline-secondary w-100 py-3 text-start">
+              <i class="bi bi-person-badge me-2"></i> My Posts
+            </button>
+          </form>
+
+          <a href="/dashboard?username=<%= currentUser.username %>" class="btn btn-outline-info w-100 py-3 text-start">
+            <i class="bi bi-person-circle me-2"></i> Dashboard
+          </a>
+
+          <button class="btn btn-outline-secondary w-100 py-3 text-start" onclick="closeMenuThenModal('messagesModal')">
+            <i class="bi bi-envelope me-2"></i> My Messages
+          </button>
+
+          <button class="btn btn-outline-warning w-100 py-3 text-start" onclick="closeMenuThenModal('reportModal')">
+            <i class="bi bi-exclamation-triangle me-2"></i> Report an Issue
+          </button>
+
+          <hr>
+          <a href="/logout" class="btn btn-danger py-3">Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- _____ PRICE RANGE MODAL _____ -->
+    <div class="modal fade" id="priceRangeModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white border-0">
+            <h6 class="modal-title fw-bold">Price Range</h6>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/marketplace" method="POST">
+              <input type="hidden" name="username" value="<%= currentUser.username %>">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Min Price ($)</label>
+                <input type="number" name="minPrice" class="form-control" min="0" placeholder="0">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Max Price ($)</label>
+                <input type="number" name="maxPrice" class="form-control" min="0" placeholder="1000">
+              </div>
+              <button type="submit" class="btn btn-primary w-100 fw-bold">Apply</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- _____ BID RANGE MODAL _____ -->
+    <div class="modal fade" id="bidRangeModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-sm">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white border-0">
+            <h6 class="modal-title fw-bold">Bid Count Range</h6>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/marketplace" method="POST">
+              <input type="hidden" name="username" value="<%= currentUser.username %>">
+              <input type="hidden" name="biddingFilter" value="BIDS_ONLY">
+              <div class="mb-3">
+                <label class="form-label fw-bold">Min Bids</label>
+                <input type="number" name="minBids" class="form-control" min="0" placeholder="1">
+              </div>
+              <div class="mb-3">
+                <label class="form-label fw-bold">Max Bids</label>
+                <input type="number" name="maxBids" class="form-control" min="0" placeholder="50">
+              </div>
+              <button type="submit" class="btn btn-primary w-100 fw-bold">Apply</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- _____ MESSAGE POSTER MODAL _____ -->
+    <div class="modal fade" id="messageModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white border-0">
+            <h5 class="modal-title fw-bold"><i class="bi bi-chat-dots me-2"></i>Send Message</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body" id="msgBody">
+            <input type="hidden" id="msgTo" value="">
+            <input type="hidden" id="msgJobId" value="">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Subject</label>
+              <input type="text" id="msgSubject" class="form-control" placeholder="e.g. Question about your job post" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Message</label>
+              <textarea id="msgMessage" class="form-control" rows="4" placeholder="Write your message..." required></textarea>
+            </div>
+            <button type="button" class="btn btn-primary w-100 fw-bold" onclick="sendMessage()">
+              <i class="bi bi-send me-1"></i> Send Message
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- _____ MESSAGES MODAL _____ -->
+    <div class="modal fade" id="messagesModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header bg-primary text-white border-0">
+            <h5 class="modal-title fw-bold"><i class="bi bi-envelope me-2"></i>My Messages</h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body">
+            <div class="dropdown mb-3">
+              <button class="btn btn-outline-primary w-100 dropdown-toggle" data-bs-toggle="dropdown">Sort Messages</button>
+              <ul class="dropdown-menu w-100">
+                <li><button class="dropdown-item" onclick="loadMessages('newest')">Newest to Oldest</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('oldest')">Oldest to Newest</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('open_jobs')">Currently Open Jobs</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('closed_jobs')">Closed Jobs</button></li>
+                <li><button class="dropdown-item" onclick="loadMessages('current_bids')">Current Bids</button></li>
+              </ul>
+            </div>
+            <div id="messagesList">
+              <p class="text-muted text-center fst-italic">Loading messages...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- _____ REPORT AN ISSUE MODAL _____ -->
+    <div class="modal fade" id="reportModal" tabindex="-1" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
+          <div class="modal-header report-modal-header border-0">
+            <h5 class="modal-title fw-bold" style="color: #003366 !important;"><i class="bi bi-flag me-2"></i>Report an Issue</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+          <div class="modal-body report-modal-body" id="reportBody">
+            <div class="mb-3">
+              <label class="form-label fw-bold">Subject</label>
+              <input type="text" id="reportSubject" class="form-control" placeholder="Brief description of the issue" required>
+            </div>
+            <div class="mb-3">
+              <label class="form-label fw-bold">Description</label>
+              <textarea id="reportDescription" class="form-control" rows="4" placeholder="Describe your issue in detail..." required></textarea>
+            </div>
+            <button type="button" class="btn btn-primary w-100 fw-bold" onclick="submitReport()">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    // _____ DARK MODE _____
+    var body = document.body;
+    var darkModeToggle = document.getElementById('darkModeToggle');
+
+    var savedTheme = localStorage.getItem('theme');
+    if (savedTheme === 'dark') {
+      body.classList.add('dark-mode');
+      if (darkModeToggle) darkModeToggle.checked = true;
+    }
+
+    if (darkModeToggle) {
+      darkModeToggle.addEventListener('change', function() {
+        if (darkModeToggle.checked) {
+          body.classList.add('dark-mode');
+          localStorage.setItem('theme', 'dark');
+        } else {
+          body.classList.remove('dark-mode');
+          localStorage.setItem('theme', 'light');
+        }
+      });
+    }
+
+    // _____ CLOSE MENU THEN OPEN MODAL _____
+    function closeMenuThenModal(modalId) {
+      var menu = document.getElementById('floatingMenu');
+      if (menu.classList.contains('show')) {
+        var collapse = bootstrap.Collapse.getInstance(menu);
+        if (collapse) collapse.hide();
+      }
+      // Wait for menu to close, then open modal
+      setTimeout(function() {
+        var modal = new bootstrap.Modal(document.getElementById(modalId));
+        modal.show();
+      }, 350);
+    }
+
+    // _____ MESSAGE POSTER _____
+    function openMessageModal(toUser, jobId, role) {
+      document.getElementById('msgTo').value = toUser;
+      document.getElementById('msgJobId').value = jobId;
+      document.getElementById('msgSubject').value = '';
+      document.getElementById('msgMessage').value = '';
+
+      // Reset body if it was replaced with success message
+      var msgBody = document.getElementById('msgBody');
+      if (!msgBody.querySelector('#msgSubject')) {
+        msgBody.innerHTML =
+          '<input type="hidden" id="msgTo" value="' + toUser + '">' +
+          '<input type="hidden" id="msgJobId" value="' + jobId + '">' +
+          '<div class="mb-3"><label class="form-label fw-bold">Subject</label>' +
+          '<input type="text" id="msgSubject" class="form-control" placeholder="e.g. Question about your job post" required></div>' +
+          '<div class="mb-3"><label class="form-label fw-bold">Message</label>' +
+          '<textarea id="msgMessage" class="form-control" rows="4" placeholder="Write your message..." required></textarea></div>' +
+          '<button type="button" class="btn btn-primary w-100 fw-bold" onclick="sendMessage()">' +
+          '<i class="bi bi-send me-1"></i> Send Message</button>';
+      }
+
+      var modal = new bootstrap.Modal(document.getElementById('messageModal'));
+      modal.show();
+    }
+
+    function sendMessage() {
+      var to = document.getElementById('msgTo').value;
+      var jobId = document.getElementById('msgJobId').value;
+      var subject = document.getElementById('msgSubject').value.trim();
+      var message = document.getElementById('msgMessage').value.trim();
+      if (!subject || !message) return;
+
+      fetch('/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: '<%= currentUser.username %>',
+          to: to,
+          subject: subject,
+          body: message,
+          jobId: jobId
+        })
+      }).then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            document.getElementById('msgBody').innerHTML =
+              '<div class="text-center py-4">' +
+              '<i class="bi bi-check-circle-fill display-3 text-success mb-3"></i>' +
+              '<h5 class="fw-bold">Message Sent!</h5>' +
+              '<p class="text-muted">Your message has been delivered.</p>' +
+              '</div>';
+          }
+        });
+    }
+
+    // _____ MESSAGES _____
+    var messagesModal = document.getElementById('messagesModal');
+    if (messagesModal) {
+      messagesModal.addEventListener('show.bs.modal', function() { loadMessages('newest'); });
+    }
+
+    var allMessages = [];
+
+    function loadMessages(sortBy) {
+      var username = '<%= currentUser.username %>';
+      fetch('/messages?username=' + encodeURIComponent(username) + '&sort=' + sortBy)
+        .then(function(r) { return r.json(); })
+        .then(function(msgs) {
+          allMessages = msgs;
+          var container = document.getElementById('messagesList');
+          if (msgs.length === 0) {
+            container.innerHTML = '<p class="text-muted text-center fst-italic">No messages yet.</p>';
+            return;
+          }
+          var html = '';
+          msgs.forEach(function(msg, idx) {
+            var isSent = msg.from === username;
+            var otherPerson = isSent ? msg.to : msg.from;
+            html += '<div class="card mb-2 border-0 shadow-sm" style="cursor:pointer;" onclick="openConversation(\'' + otherPerson.replace(/'/g, "\\'") + '\')">';
+            html += '<div class="card-body py-2 px-3">';
+            html += '<div class="d-flex justify-content-between"><strong class="text-primary">' + msg.subject + '</strong>';
+            html += '<small class="text-muted">' + new Date(msg.createdAt).toLocaleDateString() + '</small></div>';
+            html += '<p class="small mb-1 text-truncate">' + msg.body + '</p>';
+            html += '<small class="text-muted">' + (isSent ? 'To: ' + msg.to : 'From: ' + msg.from) + '</small>';
+            html += '</div></div>';
+          });
+          container.innerHTML = html;
+        });
+    }
+
+    function openConversation(otherPerson) {
+      var username = '<%= currentUser.username %>';
+      // Filter all messages between me and this person
+      var convo = allMessages.filter(function(m) {
+        return (m.from === otherPerson && m.to === username) || (m.from === username && m.to === otherPerson);
+      });
+
+      // Sort oldest first for conversation view
+      convo.sort(function(a, b) { return new Date(a.createdAt) - new Date(b.createdAt); });
+
+      var html = '<button class="btn btn-sm btn-outline-secondary mb-3" onclick="loadMessages(\'newest\')"><i class="bi bi-arrow-left me-1"></i> Back</button>';
+      html += '<h6 class="fw-bold text-primary mb-3">Conversation with ' + otherPerson + '</h6>';
+
+      if (convo.length === 0) {
+        html += '<p class="text-muted fst-italic">No messages in this conversation.</p>';
+      } else {
+        convo.forEach(function(msg) {
+          var isMine = msg.from === username;
+          html += '<div class="d-flex ' + (isMine ? 'justify-content-end' : 'justify-content-start') + ' mb-2">';
+          html += '<div class="card border-0 shadow-sm" style="max-width: 85%; background:' + (isMine ? '#003366' : '#edf3f8') + ';">';
+          html += '<div class="card-body py-2 px-3">';
+          html += '<strong style="color:' + (isMine ? '#ffc107' : '#003366') + '; font-size: 0.8rem;">' + msg.subject + '</strong>';
+          html += '<p class="small mb-1" style="color:' + (isMine ? '#ffffff' : '#333') + ';">' + msg.body + '</p>';
+          html += '<small style="color:' + (isMine ? '#aaa' : '#999') + ';">' + new Date(msg.createdAt).toLocaleString() + '</small>';
+          html += '</div></div></div>';
+        });
+      }
+
+      // Reply box
+      html += '<hr>';
+      html += '<div class="mb-2"><input type="text" id="replySubject" class="form-control form-control-sm" placeholder="Subject" value="Re: ' + (convo.length > 0 ? convo[convo.length-1].subject.replace(/^Re: /, '') : '') + '"></div>';
+      html += '<div class="input-group">';
+      html += '<textarea id="replyBody" class="form-control" rows="2" placeholder="Type a reply..."></textarea>';
+      html += '<button class="btn btn-primary" onclick="sendReply(\'' + otherPerson.replace(/'/g, "\\'") + '\')"><i class="bi bi-send"></i></button>';
+      html += '</div>';
+
+      document.getElementById('messagesList').innerHTML = html;
+    }
+
+    function sendReply(toUser) {
+      var subject = document.getElementById('replySubject').value.trim();
+      var body = document.getElementById('replyBody').value.trim();
+      if (!body) return;
+      if (!subject) subject = 'Message';
+
+      fetch('/send-message', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          from: '<%= currentUser.username %>',
+          to: toUser,
+          subject: subject,
+          body: body
+        })
+      }).then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.success) {
+            // Reload conversation - re-fetch messages then reopen convo
+            fetch('/messages?username=' + encodeURIComponent('<%= currentUser.username %>') + '&sort=newest')
+              .then(function(r) { return r.json(); })
+              .then(function(msgs) {
+                allMessages = msgs;
+                openConversation(toUser);
+              });
+          }
+        });
+    }
+
+    // _____ REPORT _____
+    function submitReport() {
+      var subject = document.getElementById('reportSubject').value.trim();
+      var description = document.getElementById('reportDescription').value.trim();
+      if (!subject || !description) return;
+
+      fetch('/report-issue', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username: '<%= currentUser.username %>', subject: subject, description: description })
+      }).then(function() {
+        document.getElementById('reportBody').innerHTML =
+          '<div class="text-center py-4">' +
+          '<i class="bi bi-check-circle-fill display-3 text-success mb-3"></i>' +
+          '<h5 class="fw-bold">Thank you!</h5>' +
+          '<p class="text-muted">Replies from administration takes 3-5 business days.</p>' +
+          '<p class="text-muted">Thank you for your patience.</p>' +
+          '</div>';
+      });
+    }
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>
