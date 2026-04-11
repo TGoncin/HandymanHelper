@@ -21,7 +21,9 @@
     <a href="#archive">Archive & History</a> &nbsp;&nbsp;•&nbsp;&nbsp;
     <a href="#feedback">Feedback</a> &nbsp;&nbsp;•&nbsp;&nbsp;
     <a href="#mvp-report">MVP Development Report</a> &nbsp;&nbsp;•&nbsp;&nbsp;
+    <br>
     <a href="#setup">Setup & Installation</a>
+    <br>
   </p>
 </div>
 
@@ -413,7 +415,7 @@ Focus shifted to transitioning the project from a static file-based system to a 
 <br>
 
  
-<h2 align="center" id="setup">🛠️ Local Setup & Installation</h2>
+<h2 align="center" id="setup">Local Setup & Installation</h2>
 
 To run <strong>Handyman Helper</strong> on your local machine, follow these steps:
 
