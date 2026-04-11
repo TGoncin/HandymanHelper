@@ -51,6 +51,14 @@
 <br>
 <br>
 
+
+  <ul style="margin-left: 40px;">
+  <li>
+    <strong><a href="Final%20Project%20Report%20-Group%20J.pdf">Final Project Report</a></strong><br>
+  </li>
+
+  <br>
+
   
 <ul style="margin-left: 40px;">
   <li>
@@ -155,6 +163,9 @@
   
   
   <br>
+
+
+
 
   
 <h2 align="center" id="our-team">Our Team</h2>
@@ -354,8 +365,8 @@ Focus shifted to transitioning the project from a static file-based system to a 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Implemented <code>skip</code> and <code>limit</code> logic in <code>server.js</code> to restrict the marketplace to 25 ads per page.
   </li>
   <li><strong>The "pageForm" Assistant:</strong><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Created a hidden form mechanism to preserve the <code>currentUser</code> session and <code>searchQuery</code> state during POST-based pagination.
-  </li>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Created a hidden form mechanism to preserve the <code>currentUser</code> session and <code>searchQuery</code> state during POST-based <br>     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;pagination.
+    </li>
   <li><strong>Search Engine:</strong><br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Added case-insensitive Regex search to filter 50+ prototype ads by title.
   </li>
@@ -363,10 +374,13 @@ Focus shifted to transitioning the project from a static file-based system to a 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Established a sticky blue Menu bar and forced a 500px aspect ratio wrapper for desktop prototyping.
   </li>
   <li><strong>Trust & Verification:</strong><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integrated camera functionality for license photos and implemented a "Master Switch" to disable bidding for unverified contractors.
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Integrated camera functionality for license photos and implemented a "Master Switch" to disable bidding for unverified <br>     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; contractors.
   </li>
 </ul>
-
+  
+<br>
+  <br>
+  
 <h3 align="left">Technical Logic & Database</h3>
 <ul style="margin-left: 40px;">
   <li><strong>Job.js & User.js Models:</strong><br>
@@ -376,7 +390,10 @@ Focus shifted to transitioning the project from a static file-based system to a 
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Implemented <code>isLoggedIn</code> guards to protect marketplace routes and <code>express.static</code> for asset serving.
   </li>
 </ul>
-
+  
+<br>
+  <br>
+  
 <h3 align="left">Immediate Next Steps</h3>
 <ul style="margin-left: 40px;">
   <li><strong>Refine Search:</strong><br>
@@ -406,12 +423,29 @@ To run <strong>Handyman Helper</strong> on your local machine, follow these step
   </li>
   <li><strong>Install dependencies:</strong><br>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Navigate to the root directory and run <code>npm install</code>.
+    <br> 
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Note: 
+    <br>
+    You may also copy and paste this code into a .bat file and run it in Visual Studio Code's terminal to automate dependancy installation: 
+    <br>
+    <br>
+    
+                        @echo off
+                    echo __________________________________________
+                    echo INSTALLING HANDYMAN HELPER DEPENDENCIES
+                    echo __________________________________________
+                    call npm install express mongoose ejs passport passport-local multer
+                    echo.
+                    echo INSTALLATION HAS COMPLETED
+                    pause
+    
   </li>
-  <li><strong>Environment Variables:</strong><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Create a <code>.env</code> file in the root and add your <code>MONGO_URI</code> connection string.
+    </li>
+  <li><strong>If you desire to seed the database prior to starting the server, run our seeding file to fill up some data:</strong><br>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run <code>node seed.js</code> to launch the application.
   </li>
   <li><strong>Start the server:</strong><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run <code>node server.js</code> or <code>npm start</code> to launch the application.
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run <code>node server.js</code> to launch the application.
   </li>
 </ul>
 <p align="center">
@@ -420,74 +454,11 @@ To run <strong>Handyman Helper</strong> on your local machine, follow these step
 
 
 
-
-
-<h3 align="left">Local Installtion</h3>
-<ul style="margin-left: 40px;">
-  <li>
-    <strong>
-      Clone the repository:
-    </strong>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;git clone https://github.com/TGoncin/HandymanHelper.git
-  </li>
-  
-  <li>
-    <strong>
-      Install dependencies through terminal within root directory:
-    </strong>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; npm -i ejs          <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; npm -i mongoose     <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; npm -i mongod       <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; npm -i express      <br>
-  </li>
-  
-</ul>
-  <li>
-    <strong>To run server:</strong><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;node server.js
-  </li>
-  
-  <li>
-    <strong>To seed server with imaginary posts for testing:</strong><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;RUN PRIOR TO <node server.js>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Run --> <node seed.js>  
-  </li>
-      
-  <li>
-    <strong>Launch on your browser:</strong><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;http://localhost:3000
-    <br>
-    <br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enjoy!
-  </li>
-
-
-          @echo off
-          echo ==========================================
-          echo STARTING HANDYMAN HELPER SERVER
-          echo ==========================================
-          set /p seed="Seed database with imaginary posts? (y/n): "
-          if /i "%seed%"=="y" (
-              node seed.js
-          )
-          echo Starting server...
-          node server.js
-          pause
+<br>
+<br>
 
 
 
-📋 Prerequisites
-In order for Handyman Helepr to run, these must be installed:
 
-@echo off
-echo ==========================================
-echo INSTALLING HANDYMAN HELPER DEPENDENCIES
-echo ==========================================
-call npm install express mongoose ejs passport passport-local multer
-echo.
-echo INSTALLATION COMPLETE
-pause
 
 <p align="right"><a href="#image"><strong>Back to top ↑</strong></a></p>
