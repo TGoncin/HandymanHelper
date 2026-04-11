@@ -32,6 +32,8 @@
 <br>
 <br>
 <br>
+<h3>Check out our commercial!</h3>
+<br>
 
 [![Click here to watch the Handyman Helper Commercial!](https://i.ytimg.com/vi/aIcmeqSuSrw/maxresdefault.jpg)](https://youtube.com/shorts/aIcmeqSuSrw?feature=share)
 
