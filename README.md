@@ -32,7 +32,9 @@
 <br>
 <br>
 <br>
-<br>
+
+[![Click here to watch the Handyman Helper Commercial!](https://i.ytimg.com/vi/aIcmeqSuSrw/maxresdefault.jpg)](https://youtube.com/shorts/aIcmeqSuSrw?feature=share)
+
 <br>
 <br>
 <br>
